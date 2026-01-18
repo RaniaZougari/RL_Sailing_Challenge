@@ -21,7 +21,7 @@ def train_agent(
     wind_scenario_name,
     num_episodes=100,
     max_steps=1000,
-    save_path="models/trained_my_agent.pkl",
+    save_path="models/trained_agent.pkl",
     seed=42,
 ):
 
@@ -81,7 +81,7 @@ def train_agent(
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     agent.save(save_path)
     print(f"Trained agent saved to '{save_path}'")
-    
+
 
     print("\nTraining completed!")
     print(f"Time: {training_time:.1f}s")
@@ -131,9 +131,9 @@ if __name__ == "__main__":
 
     training = train_agent(
         agent=agent,
-        wind_scenario_name="training_1",
+        wind_scenario_name="simple_static",
         num_episodes=1000,   # increase later
-        save_path="models/trained_my_agent.pkl",
+        save_path="models/trained_my_agent_3.pkl",
     )
     visualize_training_results(rewards_history=training["rewards"],
         steps_history=training["steps"],
