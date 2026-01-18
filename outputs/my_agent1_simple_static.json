@@ -1,0 +1,117 @@
+Loaded agent: MyAgent
+
+Evaluating on 1 wind scenarios with 100 seeds
+Agent: MyAgent
+Maximum steps per episode: 1000
+
+WIND_SCENARIO    | SUCCESS RATE | MEAN REWARD       | MEAN STEPS
+---------------------------------------------------------------------------
+Seed 1: Reward = 0.00, Steps = 1000, Success = False
+Seed 2: Reward = 0.00, Steps = 1000, Success = False
+Seed 3: Reward = 0.00, Steps = 1000, Success = False
+Seed 4: Reward = 0.00, Steps = 1000, Success = False
+Seed 5: Reward = 0.00, Steps = 1000, Success = False
+Seed 6: Reward = 0.00, Steps = 1000, Success = False
+Seed 7: Reward = 0.00, Steps = 1000, Success = False
+Seed 8: Reward = 0.00, Steps = 1000, Success = False
+Seed 9: Reward = 0.00, Steps = 1000, Success = False
+Seed 10: Reward = 0.00, Steps = 1000, Success = False
+Seed 11: Reward = 0.00, Steps = 1000, Success = False
+Seed 12: Reward = 0.00, Steps = 1000, Success = False
+Seed 13: Reward = 0.00, Steps = 1000, Success = False
+Seed 14: Reward = 0.00, Steps = 1000, Success = False
+Seed 15: Reward = 0.00, Steps = 1000, Success = False
+Seed 16: Reward = 0.00, Steps = 1000, Success = False
+Seed 17: Reward = 0.00, Steps = 1000, Success = False
+Seed 18: Reward = 0.00, Steps = 1000, Success = False
+Seed 19: Reward = 0.00, Steps = 1000, Success = False
+Seed 20: Reward = 0.00, Steps = 1000, Success = False
+Seed 21: Reward = 0.00, Steps = 1000, Success = False
+Seed 22: Reward = 0.00, Steps = 1000, Success = False
+Seed 23: Reward = 0.00, Steps = 1000, Success = False
+Seed 24: Reward = 0.00, Steps = 1000, Success = False
+Seed 25: Reward = 0.00, Steps = 1000, Success = False
+Seed 26: Reward = 0.00, Steps = 1000, Success = False
+Seed 27: Reward = 0.00, Steps = 1000, Success = False
+Seed 28: Reward = 0.00, Steps = 1000, Success = False
+Seed 29: Reward = 0.00, Steps = 1000, Success = False
+Seed 30: Reward = 0.00, Steps = 1000, Success = False
+Seed 31: Reward = 0.00, Steps = 1000, Success = False
+Seed 32: Reward = 0.00, Steps = 1000, Success = False
+Seed 33: Reward = 0.00, Steps = 1000, Success = False
+Seed 34: Reward = 0.00, Steps = 1000, Success = False
+Seed 35: Reward = 0.00, Steps = 1000, Success = False
+Seed 36: Reward = 0.00, Steps = 1000, Success = False
+Seed 37: Reward = 0.00, Steps = 1000, Success = False
+Seed 38: Reward = 0.00, Steps = 1000, Success = False
+Seed 39: Reward = 0.00, Steps = 1000, Success = False
+Seed 40: Reward = 0.00, Steps = 1000, Success = False
+Seed 41: Reward = 0.00, Steps = 1000, Success = False
+Seed 42: Reward = 0.00, Steps = 1000, Success = False
+Seed 43: Reward = 0.00, Steps = 1000, Success = False
+Seed 44: Reward = 0.00, Steps = 1000, Success = False
+Seed 45: Reward = 0.00, Steps = 1000, Success = False
+Seed 46: Reward = 0.00, Steps = 1000, Success = False
+Seed 47: Reward = 0.00, Steps = 1000, Success = False
+Seed 48: Reward = 0.00, Steps = 1000, Success = False
+Seed 49: Reward = 0.00, Steps = 1000, Success = False
+Seed 50: Reward = 0.00, Steps = 1000, Success = False
+Seed 51: Reward = 0.00, Steps = 1000, Success = False
+Seed 52: Reward = 0.00, Steps = 1000, Success = False
+Seed 53: Reward = 0.00, Steps = 1000, Success = False
+Seed 54: Reward = 0.00, Steps = 1000, Success = False
+Seed 55: Reward = 0.00, Steps = 1000, Success = False
+Seed 56: Reward = 0.00, Steps = 1000, Success = False
+Seed 57: Reward = 0.00, Steps = 1000, Success = False
+Seed 58: Reward = 0.00, Steps = 1000, Success = False
+Seed 59: Reward = 0.00, Steps = 1000, Success = False
+Seed 60: Reward = 0.00, Steps = 1000, Success = False
+Seed 61: Reward = 0.00, Steps = 1000, Success = False
+Seed 62: Reward = 0.00, Steps = 1000, Success = False
+Seed 63: Reward = 0.00, Steps = 1000, Success = False
+Seed 64: Reward = 0.00, Steps = 1000, Success = False
+Seed 65: Reward = 0.00, Steps = 1000, Success = False
+Seed 66: Reward = 0.00, Steps = 1000, Success = False
+Seed 67: Reward = 0.00, Steps = 1000, Success = False
+Seed 68: Reward = 0.00, Steps = 1000, Success = False
+Seed 69: Reward = 0.00, Steps = 1000, Success = False
+Seed 70: Reward = 0.00, Steps = 1000, Success = False
+Seed 71: Reward = 0.00, Steps = 1000, Success = False
+Seed 72: Reward = 0.00, Steps = 1000, Success = False
+Seed 73: Reward = 0.00, Steps = 1000, Success = False
+Seed 74: Reward = 0.00, Steps = 1000, Success = False
+Seed 75: Reward = 0.00, Steps = 1000, Success = False
+Seed 76: Reward = 0.00, Steps = 1000, Success = False
+Seed 77: Reward = 0.00, Steps = 1000, Success = False
+Seed 78: Reward = 0.00, Steps = 1000, Success = False
+Seed 79: Reward = 0.00, Steps = 1000, Success = False
+Seed 80: Reward = 0.00, Steps = 1000, Success = False
+Seed 81: Reward = 0.00, Steps = 1000, Success = False
+Seed 82: Reward = 0.00, Steps = 1000, Success = False
+Seed 83: Reward = 0.00, Steps = 1000, Success = False
+Seed 84: Reward = 0.00, Steps = 1000, Success = False
+Seed 85: Reward = 0.00, Steps = 1000, Success = False
+Seed 86: Reward = 0.00, Steps = 1000, Success = False
+Seed 87: Reward = 0.00, Steps = 1000, Success = False
+Seed 88: Reward = 0.00, Steps = 1000, Success = False
+Seed 89: Reward = 0.00, Steps = 1000, Success = False
+Seed 90: Reward = 0.00, Steps = 1000, Success = False
+Seed 91: Reward = 0.00, Steps = 1000, Success = False
+Seed 92: Reward = 0.00, Steps = 1000, Success = False
+Seed 93: Reward = 0.00, Steps = 1000, Success = False
+Seed 94: Reward = 0.00, Steps = 1000, Success = False
+Seed 95: Reward = 0.00, Steps = 1000, Success = False
+Seed 96: Reward = 0.00, Steps = 1000, Success = False
+Seed 97: Reward = 0.00, Steps = 1000, Success = False
+Seed 98: Reward = 0.00, Steps = 1000, Success = False
+Seed 99: Reward = 0.00, Steps = 1000, Success = False
+Seed 100: Reward = 0.00, Steps = 1000, Success = False
+
+Results for wind scenario: simple_static
+Success rate: 0.00%
+Discounted rewards mean: 0.00 ± 0.00
+Step count mean: 1000.0 ± 0.0
+---------------------------------------------------------------------------
+OVERALL      | Success: 0.00% ± 0.00%
+Reward: 0.00 ± 0.00
+Steps: 1000.0 ± 0.0

@@ -1,0 +1,117 @@
+Loaded agent: MyAgent
+
+Evaluating on 1 wind scenarios with 100 seeds
+Agent: MyAgent
+Maximum steps per episode: 1000
+
+WIND_SCENARIO    | SUCCESS RATE | MEAN REWARD       | MEAN STEPS
+---------------------------------------------------------------------------
+Seed 1: Reward = 0.00, Steps = 1000, Success = False
+Seed 2: Reward = 0.38, Steps = 556, Success = True
+Seed 3: Reward = 39.67, Steps = 93, Success = True
+Seed 4: Reward = 40.88, Steps = 90, Success = True
+Seed 5: Reward = 2.26, Steps = 378, Success = True
+Seed 6: Reward = 44.30, Steps = 82, Success = True
+Seed 7: Reward = 42.99, Steps = 85, Success = True
+Seed 8: Reward = 21.92, Steps = 152, Success = True
+Seed 9: Reward = 39.27, Steps = 94, Success = True
+Seed 10: Reward = 39.67, Steps = 93, Success = True
+Seed 11: Reward = 42.13, Steps = 87, Success = True
+Seed 12: Reward = 15.58, Steps = 186, Success = True
+Seed 13: Reward = 42.13, Steps = 87, Success = True
+Seed 14: Reward = 45.66, Steps = 79, Success = True
+Seed 15: Reward = 35.87, Steps = 103, Success = True
+Seed 16: Reward = 0.77, Steps = 485, Success = True
+Seed 17: Reward = 35.16, Steps = 105, Success = True
+Seed 18: Reward = 7.18, Steps = 263, Success = True
+Seed 19: Reward = 45.66, Steps = 79, Success = True
+Seed 20: Reward = 0.43, Steps = 543, Success = True
+Seed 21: Reward = 7.18, Steps = 263, Success = True
+Seed 22: Reward = 26.54, Steps = 133, Success = True
+Seed 23: Reward = 41.29, Steps = 89, Success = True
+Seed 24: Reward = 38.49, Steps = 96, Success = True
+Seed 25: Reward = 10.21, Steps = 228, Success = True
+Seed 26: Reward = 50.49, Steps = 69, Success = True
+Seed 27: Reward = 45.20, Steps = 80, Success = True
+Seed 28: Reward = 13.67, Steps = 199, Success = True
+Seed 29: Reward = 8.96, Steps = 241, Success = True
+Seed 30: Reward = 18.30, Steps = 170, Success = True
+Seed 31: Reward = 42.56, Steps = 86, Success = True
+Seed 32: Reward = 18.11, Steps = 171, Success = True
+Seed 33: Reward = 36.97, Steps = 100, Success = True
+Seed 34: Reward = 0.00, Steps = 1000, Success = False
+Seed 35: Reward = 2.48, Steps = 369, Success = True
+Seed 36: Reward = 0.19, Steps = 622, Success = True
+Seed 37: Reward = 0.02, Steps = 864, Success = True
+Seed 38: Reward = 0.04, Steps = 792, Success = True
+Seed 39: Reward = 0.44, Steps = 540, Success = True
+Seed 40: Reward = 38.10, Steps = 97, Success = True
+Seed 41: Reward = 5.16, Steps = 296, Success = True
+Seed 42: Reward = 5.70, Steps = 286, Success = True
+Seed 43: Reward = 4.35, Steps = 313, Success = True
+Seed 44: Reward = 11.29, Steps = 218, Success = True
+Seed 45: Reward = 8.11, Steps = 251, Success = True
+Seed 46: Reward = 8.87, Steps = 242, Success = True
+Seed 47: Reward = 0.00, Steps = 1000, Success = False
+Seed 48: Reward = 0.00, Steps = 1000, Success = False
+Seed 49: Reward = 11.41, Steps = 217, Success = True
+Seed 50: Reward = 44.30, Steps = 82, Success = True
+Seed 51: Reward = 4.62, Steps = 307, Success = True
+Seed 52: Reward = 0.00, Steps = 1000, Success = False
+Seed 53: Reward = 44.75, Steps = 81, Success = True
+Seed 54: Reward = 9.24, Steps = 238, Success = True
+Seed 55: Reward = 37.35, Steps = 99, Success = True
+Seed 56: Reward = 9.24, Steps = 238, Success = True
+Seed 57: Reward = 34.12, Steps = 108, Success = True
+Seed 58: Reward = 44.75, Steps = 81, Success = True
+Seed 59: Reward = 25.49, Steps = 137, Success = True
+Seed 60: Reward = 10.85, Steps = 222, Success = True
+Seed 61: Reward = 0.69, Steps = 496, Success = True
+Seed 62: Reward = 19.05, Steps = 166, Success = True
+Seed 63: Reward = 0.00, Steps = 1000, Success = False
+Seed 64: Reward = 29.94, Steps = 121, Success = True
+Seed 65: Reward = 5.82, Steps = 284, Success = True
+Seed 66: Reward = 10.11, Steps = 229, Success = True
+Seed 67: Reward = 12.00, Steps = 212, Success = True
+Seed 68: Reward = 36.97, Steps = 100, Success = True
+Seed 69: Reward = 42.99, Steps = 85, Success = True
+Seed 70: Reward = 44.75, Steps = 81, Success = True
+Seed 71: Reward = 13.95, Steps = 197, Success = True
+Seed 72: Reward = 0.27, Steps = 588, Success = True
+Seed 73: Reward = 0.00, Steps = 1000, Success = False
+Seed 74: Reward = 9.14, Steps = 239, Success = True
+Seed 75: Reward = 0.30, Steps = 579, Success = True
+Seed 76: Reward = 0.51, Steps = 526, Success = True
+Seed 77: Reward = 8.44, Steps = 247, Success = True
+Seed 78: Reward = 15.27, Steps = 188, Success = True
+Seed 79: Reward = 34.81, Steps = 106, Success = True
+Seed 80: Reward = 31.48, Steps = 116, Success = True
+Seed 81: Reward = 0.00, Steps = 1000, Success = False
+Seed 82: Reward = 41.71, Steps = 88, Success = True
+Seed 83: Reward = 12.74, Steps = 206, Success = True
+Seed 84: Reward = 13.40, Steps = 201, Success = True
+Seed 85: Reward = 10.01, Steps = 230, Success = True
+Seed 86: Reward = 44.30, Steps = 82, Success = True
+Seed 87: Reward = 0.91, Steps = 469, Success = True
+Seed 88: Reward = 36.60, Steps = 101, Success = True
+Seed 89: Reward = 29.05, Steps = 124, Success = True
+Seed 90: Reward = 20.64, Steps = 158, Success = True
+Seed 91: Reward = 24.98, Steps = 139, Success = True
+Seed 92: Reward = 46.12, Steps = 78, Success = True
+Seed 93: Reward = 9.81, Steps = 232, Success = True
+Seed 94: Reward = 48.01, Steps = 74, Success = True
+Seed 95: Reward = 0.00, Steps = 1000, Success = False
+Seed 96: Reward = 16.88, Steps = 178, Success = True
+Seed 97: Reward = 29.94, Steps = 121, Success = True
+Seed 98: Reward = 7.11, Steps = 264, Success = True
+Seed 99: Reward = 0.00, Steps = 1000, Success = False
+Seed 100: Reward = 16.22, Steps = 182, Success = True
+
+Results for wind scenario: training_3
+Success rate: 90.00%
+Discounted rewards mean: 19.86 ± 17.00
+Step count mean: 297.5 ± 283.1
+---------------------------------------------------------------------------
+OVERALL      | Success: 90.00% ± 0.00%
+Reward: 19.86 ± 17.00
+Steps: 297.5 ± 283.1

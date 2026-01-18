@@ -1,0 +1,15 @@
+Loaded agent: MyAgent
+
+Evaluating on 3 wind scenarios with 100 seeds
+Agent: MyAgent
+Maximum steps per episode: 1000
+
+WIND_SCENARIO    | SUCCESS RATE | MEAN REWARD       | MEAN STEPS
+---------------------------------------------------------------------------
+training_1   | Success: 84.00% | Reward: 13.71 ± 11.02 | Steps: 352.1 ± 312.6
+training_2   | Success: 93.00% | Reward: 40.41 ± 28.64 | Steps: 229.7 ± 306.5
+training_3   | Success: 90.00% | Reward: 19.86 ± 17.00 | Steps: 297.5 ± 283.1
+---------------------------------------------------------------------------
+OVERALL      | Success: 89.00% ± 3.74%
+Reward: 24.66 ± 11.41
+Steps: 293.1 ± 50.1
