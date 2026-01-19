@@ -71,15 +71,42 @@ def train_stage(args, results):
     model_dir.mkdir(exist_ok=True, parents=True)
     
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    model_path = model_dir / f"{args.agent}_{args.scenario}_{timestamp}.pkl"
+    # Handle multiple scenarios in filename
+    scenario_str = '_'.join(args.scenario) if isinstance(args.scenario, list) else args.scenario
+    if len(args.scenario) > 1:
+        scenario_str = f"multi_{len(args.scenario)}scenarios"
+    model_path = model_dir / f"{args.agent}_{scenario_str}_{timestamp}.pkl"
     
-    print(f"Training {args.agent} on {args.scenario} for {args.episodes} episodes...")
+    scenarios = args.scenario if isinstance(args.scenario, list) else [args.scenario]
+    print(f"Training {args.agent} on {len(scenarios)} scenario(s) for {args.episodes} episodes...")
+    print(f"Scenarios: {', '.join(scenarios)}")
     print(f"Model will be saved to: {model_path}")
+    
+    # Extract hyperparameters from agent for logging
+    try:
+        hyperparameters = {}
+        # List of attributes to look for
+        attributes_to_log = [
+            'learning_rate', 'discount_factor', 'exploration_rate', 
+            'exploration_decay', 'exploration_rate_min', 
+            'position_bins', 'velocity_bins', 'wind_bins', 
+            'wind_preview_steps', 'grid_size', 'q_init_high'
+        ]
+        
+        for attr in attributes_to_log:
+            if hasattr(agent, attr):
+                hyperparameters[attr] = getattr(agent, attr)
+                
+        results['hyperparameters'] = hyperparameters
+        print(f"Captured {len(hyperparameters)} hyperparameters for logging")
+    except Exception as e:
+        print(f"Warning: Failed to capture hyperparameters: {e}")
+
     
     # Train
     training_results = train_agent(
         agent=agent,
-        wind_scenario_name=args.scenario,
+        wind_scenarios=scenarios,  # Pass list of scenarios
         num_episodes=args.episodes,
         save_path=str(model_path),
         seed=args.seed
@@ -87,12 +114,13 @@ def train_stage(args, results):
     
     # Store results
     results['training'] = {
-        'scenario': args.scenario,
+        'scenarios': scenarios,
         'episodes': args.episodes,
         'final_success_rate': sum(training_results['success']) / len(training_results['success']),
         'avg_reward': sum(training_results['rewards']) / len(training_results['rewards']),
         'avg_steps': sum(training_results['steps']) / len(training_results['steps']),
-        'q_table_size': len(agent.q_table) if hasattr(agent, 'q_table') else 0
+        'q_table_size': len(agent.q_table) if hasattr(agent, 'q_table') else 0,
+        'scenario_metrics': training_results.get('scenario_metrics', {})
     }
     results['model_path'] = str(model_path)
     
@@ -178,11 +206,18 @@ def eval_stage(args, results, exported_path=None):
     if hasattr(args, 'scenarios') and args.scenarios:
         scenarios = args.scenarios.split(',')
     else:
-        scenarios = [args.scenario]
+        scenarios = args.scenario
     
     print(f"Evaluating on scenarios: {scenarios}")
     
     eval_results = {}
+    
+    import tempfile
+    import json
+    
+    # Create temp file for JSON results
+    with tempfile.NamedTemporaryFile(suffix='.json', delete=False) as tmp:
+        json_output_path = tmp.name
     
     for scenario in scenarios:
         print(f"\n📊 Evaluating on {scenario}...")
@@ -194,17 +229,46 @@ def eval_stage(args, results, exported_path=None):
             '--wind_scenario', scenario,
             '--seeds', str(args.eval_seeds),
             '--num-seeds', str(args.eval_num_seeds),
-            '--verbose'
+            '--verbose',
+            '--output-json', json_output_path
         ]
         
         result = subprocess.run(cmd, capture_output=True, text=True)
         print(result.stdout)
         
-        # Parse results (simplified - just capture success for now)
-        eval_results[scenario] = {
+        # Parse results 
+        scenario_results = {
             'output': result.stdout,
             'success': result.returncode == 0
         }
+        
+        # Try to read JSON output
+        try:
+            if os.path.exists(json_output_path) and os.path.getsize(json_output_path) > 0:
+                with open(json_output_path, 'r') as f:
+                    json_data = json.load(f)
+                    
+                    # Merge structured data
+                    if 'scenarios' in json_data and scenario in json_data['scenarios']:
+                        scenario_data = json_data['scenarios'][scenario]
+                        scenario_results.update(scenario_data)
+                    
+                    if 'overall' in json_data:
+                        # Add overall data (custom score particularly)
+                        scenario_results.update({k: v for k, v in json_data['overall'].items() if k not in scenario_results})
+                    
+                    # If we successfully loaded structured data, remove the verbose raw output
+                    if 'output' in scenario_results:
+                        del scenario_results['output']
+                        
+        except Exception as e:
+            print(f"Warning: Could not read structured results: {e}")
+
+        eval_results[scenario] = scenario_results
+        
+    # Clean up
+    if os.path.exists(json_output_path):
+        os.remove(json_output_path)
     
     results['evaluation'] = eval_results
     
@@ -253,7 +317,11 @@ def main():
     )
     
     parser.add_argument('--agent', help='Agent name (e.g., my_agent_physics)')
-    parser.add_argument('--scenario', help='Wind scenario for training')
+    parser.add_argument(
+        '--scenario',
+        nargs='+',
+        help='Wind scenario(s) for training (space-separated, e.g., training_1 training_2)'
+    )
     parser.add_argument('--scenarios', help='Comma-separated scenarios for evaluation')
     parser.add_argument('--episodes', type=int, default=100, help='Training episodes')
     parser.add_argument('--seed', type=int, default=42, help='Random seed')

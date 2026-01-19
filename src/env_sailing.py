@@ -646,11 +646,12 @@ class SailingEnv(gym.Env): # type: ignore
             distance_to_goal: Current distance to the goal
             
         Returns:
-            reward: 100 if goal reached, 0 otherwise
+            reward: 100 if goal reached, negative distance penalty otherwise
         """
         if reached_goal:
             return 100.0
-        return 0.0
+        # Simple dense reward: penalized by distance to goal
+        return min(100 / distance_to_goal, 99)
     
     def _get_observation(self):
         """

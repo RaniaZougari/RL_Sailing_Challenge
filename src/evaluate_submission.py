@@ -88,6 +88,11 @@ def parse_args():
         help="Include the hidden test wind scenario (evaluator use only)"
     )
     
+    parser.add_argument(
+        "--output-json",
+        help="Path to save evaluation results as JSON"
+    )
+    
     return parser.parse_args()
 
 def load_agent_from_file(file_path: str) -> BaseAgent:
@@ -255,6 +260,7 @@ def main():
                     agent=agent,
                     wind_scenario=wind_scenario,
                     seeds=seeds,
+                    # max_horizon=500
                     seed_callback=seed_callback if print_seed_info else None,
                     **eval_params
                 )
@@ -298,6 +304,40 @@ def main():
             print(f"Reward: {np.mean(rewards):.2f} ± {reward_std_of_means:.2f}", flush=True)
             print(f"Steps: {np.mean(steps):.1f} ± {steps_std_of_means:.1f}", flush=True)
             
+            # Custom Score Calculation
+            # Formula: score = (success_rate * 100) - (avg_steps / 10) + (avg_reward / 100)
+            avg_success_percent = np.mean(success_rates) * 100
+            avg_steps = np.mean(steps)
+            avg_reward = np.mean(rewards)
+            
+            custom_score = avg_success_percent - (avg_steps / 10.0) + (avg_reward / 100.0)
+            
+            print(f"\n🏆 CUSTOM SCORE: {custom_score:.2f}", flush=True)
+            print(f"   (Formula: Success% - Steps/10 + Reward/100)", flush=True)
+            
+            # Prepare structured results
+            structured_results = {
+                'overall': {
+                    'success_rate': np.mean(success_rates),
+                    'mean_reward': np.mean(rewards),
+                    'mean_steps': np.mean(steps),
+                    'success_rate_std': success_std_of_means,
+                    'reward_std': reward_std_of_means,
+                    'steps_std': steps_std_of_means,
+                    'custom_score': custom_score,
+                    'custom_score_formula': 'Success% - Steps/10 + Reward/100'
+                },
+                'scenarios': {
+                    name: {
+                        'success_rate': r['success_rate'],
+                        'mean_reward': r['mean_reward'],
+                        'mean_steps': r['mean_steps'],
+                        'std_reward': r['std_reward'],
+                        'std_steps': r['std_steps']
+                    } for name, r in all_results.items()
+                }
+            }
+            
             # If test wind scenario was included, calculate a weighted score (50% test, 50% training)
             if 'test' in all_results and len(all_results) > 1:
                 test_results = all_results['test']
@@ -321,6 +361,15 @@ def main():
                 print(f"\nFINAL SCORE (50% training, 50% test):", flush=True)
                 print(f"  Success rate: {weighted['success_rate']:.2%}", flush=True)
                 print(f"  Average reward: {weighted['reward']:.2f}", flush=True)
+                
+                structured_results['weighted_score'] = weighted
+                
+            # Save to JSON if requested
+            if args.output_json:
+                import json
+                with open(args.output_json, 'w') as f:
+                    json.dump(structured_results, f, indent=2)
+                print(f"\nResults saved to {args.output_json}", flush=True)
         
     except Exception as e:
         print(f"❌ Error: {str(e)}", flush=True)

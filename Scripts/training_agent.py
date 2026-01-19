@@ -18,89 +18,126 @@ from matplotlib import pyplot as plt
 
 def train_agent(
     agent,
-    wind_scenario_name,
+    wind_scenarios,  # Can be a string or a list of strings
     num_episodes=1000,
-    max_steps=1000,
+    max_steps=400,
     save_path="models/trained_agent.pkl",
     seed=42,
 ):
 
 
+    # Handle backward compatibility: convert string to list
+    if isinstance(wind_scenarios, str):
+        wind_scenarios = [wind_scenarios]
+    
     # Reproducibility
     np.random.seed(seed)
     agent.seed(seed)
 
-    env = SailingEnv(**get_wind_scenario(wind_scenario_name))
+    # Global tracking
+    all_rewards = []
+    all_steps = []
+    all_success = []
+    scenario_metrics = {}
 
-    rewards_history = []
-    steps_history = []
-    success_history = []
-
-    print(f"Starting training on '{wind_scenario_name}' "
-          f"for {num_episodes} episodes...")
+    
+    print(f"Starting training on {len(wind_scenarios)} scenario(s) "
+          f"for {num_episodes} total episodes...")
+    print(f"Scenarios: {', '.join(wind_scenarios)}")
+    print(f"Episodes per scenario: {num_episodes}\n")
 
     start_time = time.time()
 
+    # Train on each scenario
+    for scenario_idx, scenario_name in enumerate(wind_scenarios):
+        print(f"\n{'='*60}")
+        print(f"Training on scenario: {scenario_name} ({scenario_idx+1}/{len(wind_scenarios)})")
+        print(f"{'='*60}")
+        
+        env = SailingEnv(**get_wind_scenario(scenario_name))
+        
+        scenario_rewards = []
+        scenario_steps = []
+        scenario_success = []
 
+        for episode in range(num_episodes):
+            observation, info = env.reset(seed=scenario_idx * num_episodes + episode)
+            state = agent.discretize_state(observation)
 
-    for episode in range(num_episodes):
-        observation, info = env.reset(seed=episode)
-        state = agent.discretize_state(observation)
+            total_reward = 0
 
-        total_reward = 0
+            for step in range(max_steps):
+                action = agent.act(observation)
 
-        for step in range(max_steps):
-            action = agent.act(observation)
+                next_observation, reward, done, truncated, info = env.step(action)
+                next_state = agent.discretize_state(next_observation)
 
-            next_observation, reward, done, truncated, info = env.step(action)
-            next_state = agent.discretize_state(next_observation)
+                agent.learn(state, action, reward, next_state)
 
-            agent.learn(
-                state,
-                action,
-                reward,
-                next_state
-            )
+                state = next_state
+                observation = next_observation
+                total_reward += reward
 
-            state = next_state
-            observation = next_observation
-            total_reward += reward
+                if done or truncated:
+                    break
 
-            if done or truncated:
-                break
+            scenario_rewards.append(total_reward)
+            scenario_steps.append(step + 1)
+            scenario_success.append(done)
 
+            if (episode + 1) % 10 == 0:
+                success_rate = sum(scenario_success[-10:]) / 10 * 100
+                print(
+                    f"  Episode {episode+1}/{num_episodes} | "
+                    f"Success rate (last 10): {success_rate:.1f}% | "
+                    f"Epsilon: {agent.exploration_rate:.3f}"
+                )
 
-        rewards_history.append(total_reward)
-        steps_history.append(step + 1)
-        success_history.append(done)
+        # Store scenario metrics
+        scenario_metrics[scenario_name] = {
+            'success_rate': sum(scenario_success) / len(scenario_success) * 100,
+            'avg_reward': np.mean(scenario_rewards),
+            'avg_steps': np.mean(scenario_steps),
+        }
+        
+        # Add to global metrics
+        all_rewards.extend(scenario_rewards)
+        all_steps.extend(scenario_steps)
+        all_success.extend(scenario_success)
 
-        if (episode + 1) % 10 == 0:
-            success_rate = sum(success_history[-10:]) / 10 * 100
-            print(
-                f"Episode {episode+1}/{num_episodes} | "
-                f"Success rate (last 10): {success_rate:.1f}% | "
-                f"Epsilon: {agent.exploration_rate:.3f}"
-            )
+        print(f"\n  ✓ {scenario_name}: "
+              f"Success={scenario_metrics[scenario_name]['success_rate']:.1f}%, "
+              f"Reward={scenario_metrics[scenario_name]['avg_reward']:.1f}, "
+              f"Steps={scenario_metrics[scenario_name]['avg_steps']:.1f}")
 
     training_time = time.time() - start_time
 
     # Save agent
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     agent.save(save_path)
-    print(f"Trained agent saved to '{save_path}'")
+    print(f"\nTrained agent saved to '{save_path}'")
 
-
-    print("\nTraining completed!")
+    print("\n" + "="*60)
+    print("TRAINING COMPLETED!")
+    print("="*60)
     print(f"Time: {training_time:.1f}s")
-    print(f"Success rate: {sum(success_history)/len(success_history)*100:.1f}%")
-    print(f"Average reward: {np.mean(rewards_history):.2f}")
-    print(f"Average steps: {np.mean(steps_history):.1f}")
+    print(f"Overall Success rate: {sum(all_success)/len(all_success)*100:.1f}%")
+    print(f"Overall Average reward: {np.mean(all_rewards):.2f}")
+    print(f"Overall Average steps: {np.mean(all_steps):.1f}")
     print(f"Q-table size: {len(agent.q_table)}")
+    
+    print("\nPer-scenario performance:")
+    for scenario_name, metrics in scenario_metrics.items():
+        print(f"  {scenario_name}: "
+              f"Success={metrics['success_rate']:.1f}%, "
+              f"Reward={metrics['avg_reward']:.1f}, "
+              f"Steps={metrics['avg_steps']:.1f}")
 
     return {
-        "rewards": rewards_history,
-        "steps": steps_history,
-        "success": success_history,
+        "rewards": all_rewards,
+        "steps": all_steps,
+        "success": all_success,
+        "scenario_metrics": scenario_metrics,
     }
 
 

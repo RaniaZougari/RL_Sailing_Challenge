@@ -12,11 +12,10 @@ class MyAgent(BaseAgent):
         self.np_random = np.random.default_rng()
 
         # Learning parameters
-        self.learning_rate = 0.15
-        self.discount_factor = 0.99
-        self.exploration_rate = 0.4
-        self.exploration_decay = 0.997
-        self.min_exploration = 0.01
+        self.learning_rate = 0.15   # alpha
+        self.discount_factor = 0.8  # gamma
+        # Epsilon
+        self.exploration_rate = 0.05
 
         # Discretization parameters
         self.position_bins = 10
@@ -24,15 +23,10 @@ class MyAgent(BaseAgent):
         self.wind_bins = 8
         self.wind_preview_steps = 3
         self.grid_size = 32
-
-        # Physical sailing parameters
-        self.NO_GO_ANGLE = np.radians(45)      # No-Go Zone
-        self.BEAM_REACH_ANGLE = np.radians(90) # Optimal sailing angle
-        self.optimal_efficiency = 1.0
         
         # Q-table
         self.q_table = {}
-        self.initial_q_value = 10.0
+        self.q_init_high = 10.0
 
 
     def discretize_state(self, observation):
@@ -88,7 +82,8 @@ class MyAgent(BaseAgent):
         state = self.discretize_state(observation)
 
         if state not in self.q_table:
-            self.q_table[state] = np.full(9, self.initial_q_value)
+            # Initialize with random values instead of constant
+            self.q_table[state] = self.np_random.random(9) * self.q_init_high
 
         # Epsilon-greedy with physics guidance
         if self.np_random.random() < self.exploration_rate:
@@ -100,30 +95,17 @@ class MyAgent(BaseAgent):
         return action
 
     def learn(self, state, action, reward, next_state):
-        """
-        SARSA avec bonus de récompense basé sur la physique.
-        """
         if state not in self.q_table:
-            self.q_table[state] = np.full(9, self.initial_q_value)
+            self.q_table[state] = self.np_random.random(9) * self.q_init_high
         if next_state not in self.q_table:
-            self.q_table[next_state] = np.full(9, self.initial_q_value)
+            self.q_table[next_state] = self.np_random.random(9) * self.q_init_high
 
-        # Choose next action for SARSA
-        if self.np_random.random() < self.exploration_rate:
-            next_action = self.np_random.integers(0, 9)
-        else:
-            next_action = np.argmax(self.q_table[next_state])
-
-        # SARSA update standard
-        td_target = reward + self.discount_factor * self.q_table[next_state][next_action]
+        # classic bellman
+        td_target = reward + self.discount_factor * np.nanmax(self.q_table[next_state])
         td_error = td_target - self.q_table[state][action]
+
         self.q_table[state][action] += self.learning_rate * td_error
 
-        # less exploration over time
-        self.exploration_rate = max(
-            self.min_exploration,
-            self.exploration_rate * self.exploration_decay
-        )
 
     def reset(self):
         self.last_state = None

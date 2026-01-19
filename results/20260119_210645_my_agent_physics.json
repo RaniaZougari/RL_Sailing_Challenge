@@ -1,0 +1,98 @@
+{
+  "training": {
+    "scenarios": [
+      "simple_static",
+      "training_1",
+      "training_2",
+      "training_3"
+    ],
+    "episodes": 200,
+    "final_success_rate": 1.0,
+    "avg_reward": 4589.838251727252,
+    "avg_steps": 923.06875,
+    "q_table_size": 107746,
+    "scenario_metrics": {
+      "simple_static": {
+        "success_rate": 100.0,
+        "avg_reward": 3409.5797110137496,
+        "avg_steps": 1000.0
+      },
+      "training_1": {
+        "success_rate": 100.0,
+        "avg_reward": 4939.42780353459,
+        "avg_steps": 878.78
+      },
+      "training_2": {
+        "success_rate": 100.0,
+        "avg_reward": 5013.097482722093,
+        "avg_steps": 934.915
+      },
+      "training_3": {
+        "success_rate": 100.0,
+        "avg_reward": 4997.248009638579,
+        "avg_steps": 878.58
+      }
+    }
+  },
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/my_agent_physics_multi_4scenarios_20260119_210142.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/my_agent_physics_exported_20260119_210515.py",
+  "evaluation": {
+    "simple_static": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 314.48753706168515,
+      "mean_steps": 1000.0,
+      "std_reward": 7.096782795114735,
+      "std_steps": 0.0,
+      "success_rate_std": 0,
+      "reward_std": 7.096782795114735,
+      "steps_std": 0.0,
+      "custom_score": 3.1448753706168513,
+      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+    },
+    "training_1": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 366.7855602747361,
+      "mean_steps": 767.77,
+      "std_reward": 27.318479434284804,
+      "std_steps": 295.995535608225,
+      "success_rate_std": 0,
+      "reward_std": 27.318479434284804,
+      "steps_std": 295.995535608225,
+      "custom_score": 26.890855602747358,
+      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+    },
+    "training_2": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 404.66637483564625,
+      "mean_steps": 781.08,
+      "std_reward": 82.73833687352422,
+      "std_steps": 258.7334025594686,
+      "success_rate_std": 0,
+      "reward_std": 82.73833687352422,
+      "steps_std": 258.7334025594686,
+      "custom_score": 25.938663748356458,
+      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+    },
+    "training_3": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 429.07738642936306,
+      "mean_steps": 689.12,
+      "std_reward": 56.64644191325625,
+      "std_steps": 344.9457719700301,
+      "success_rate_std": 0,
+      "reward_std": 56.64644191325625,
+      "steps_std": 344.9457719700301,
+      "custom_score": 35.37877386429362,
+      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+    }
+  },
+  "metadata": {
+    "agent": "my_agent_physics",
+    "timestamp": "20260119_210645",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent my_agent_physics --scenario simple_static training_1 training_2 training_3 --episodes 200"
+  }
+}
