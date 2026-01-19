@@ -229,8 +229,8 @@ def eval_stage(args, results, exported_path=None):
             '--wind_scenario', scenario,
             '--seeds', str(args.eval_seeds),
             '--num-seeds', str(args.eval_num_seeds),
-            '--verbose',
-            '--output-json', json_output_path
+            '--output-json', json_output_path,
+            '--verbose'
         ]
         
         result = subprocess.run(cmd, capture_output=True, text=True)

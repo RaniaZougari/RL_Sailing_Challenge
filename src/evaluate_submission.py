@@ -260,7 +260,6 @@ def main():
                     agent=agent,
                     wind_scenario=wind_scenario,
                     seeds=seeds,
-                    max_horizon=500
                     seed_callback=seed_callback if print_seed_info else None,
                     **eval_params
                 )
