@@ -1,0 +1,13 @@
+{
+  "evaluation": {
+    "simple_static": {
+      "output": "",
+      "success": false
+    }
+  },
+  "metadata": {
+    "agent": null,
+    "timestamp": "20260120_001434",
+    "command": "Scripts/run_pipeline.py eval --exported-path src/Submission_agents/vmg_agent_exported_20260119_234959.py --scenario simple_static"
+  }
+}

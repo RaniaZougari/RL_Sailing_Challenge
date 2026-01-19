@@ -1,10 +1,6 @@
 """
-Improved Agent combining Q-Learning with physical sailing rules.
-Enhancements:
-- Goal direction in state representation
-- Distance-based reward shaping (progress reward)
-- Increased efficiency bonus
-- Epsilon decay during training
+Agent with VMG (Velocity Made Good) - Projected velocity towards goal.
+Based on physic_wind_with_optimal_angle.py with added VMG reward shaping.
 """
 
 import numpy as np
@@ -20,23 +16,18 @@ class MyAgent(BaseAgent):
         # Learning parameters
         self.learning_rate = 0.15   # alpha
         self.discount_factor = 0.99  # gamma
-        
-        # Epsilon - start higher for better exploration during training
-        self.exploration_rate = 0.1
-        self.epsilon_min = 0.05
-        self.epsilon_decay = 0.995
+        # Epsilon
+        self.exploration_rate = 0.05
 
         # Discretization parameters
         self.position_bins = 10
         self.velocity_bins = 5
         self.wind_bins = 8
-        self.goal_direction_bins = 8  # NEW: bins for direction to goal
         self.wind_preview_steps = 3
         self.grid_size = 32
         
-        # Goal position (top center of grid)
-        self.goal_x = 16
-        self.goal_y = 31
+        # Goal position (fixed at top center)
+        self.goal_position = np.array([16, 31])
         
         # Q-table
         self.q_table = {}
@@ -44,7 +35,7 @@ class MyAgent(BaseAgent):
         
         # State for learning
         self.last_efficiency = 0.0
-        self.last_position = None  # Track position for progress reward
+        self.last_vmg = 0.0  # NEW: Store last VMG for reward shaping
 
     def _action_to_direction(self, action):
         """Convert action index to direction vector."""
@@ -75,12 +66,6 @@ class MyAgent(BaseAgent):
         wind_angle = np.arctan2(wy, wx)
         wind_bin = int(((wind_angle + np.pi) / (2 * np.pi)) * self.wind_bins) % self.wind_bins
 
-        # NEW: Direction to goal (helps agent know where to go)
-        goal_dx = self.goal_x - x
-        goal_dy = self.goal_y - y
-        goal_angle = np.arctan2(goal_dy, goal_dx)
-        goal_dir_bin = int(((goal_angle + np.pi) / (2 * np.pi)) * self.goal_direction_bins) % self.goal_direction_bins
-
         wind_grid = wind_flattened.reshape(32, 32, 2)
         gx, gy = int(x), int(y)
 
@@ -105,8 +90,37 @@ class MyAgent(BaseAgent):
                 int(((ang + np.pi) / (2 * np.pi)) * self.wind_bins) % self.wind_bins
             )
 
-        # Include goal_dir_bin in state
-        return (x_bin, y_bin, v_bin, wind_bin, goal_dir_bin, *preview_bins)
+        return (x_bin, y_bin, v_bin, wind_bin, *preview_bins)
+
+    def _calculate_vmg(self, observation):
+        """
+        Calculate VMG (Velocity Made Good) - projected velocity towards goal.
+        
+        VMG = dot(velocity, direction_to_goal)
+        
+        Returns a value that is positive when moving towards goal,
+        negative when moving away.
+        """
+        x, y = observation[0], observation[1]
+        vx, vy = observation[2], observation[3]
+        
+        position = np.array([x, y])
+        velocity = np.array([vx, vy])
+        
+        # Direction to goal
+        direction_to_goal = self.goal_position - position
+        distance = np.linalg.norm(direction_to_goal)
+        
+        if distance < 0.1:  # Already at goal
+            return 0.0
+            
+        # Normalize direction
+        direction_to_goal = direction_to_goal / distance
+        
+        # VMG = projection of velocity onto direction to goal
+        vmg = np.dot(velocity, direction_to_goal)
+        
+        return vmg
 
     def act(self, observation, info=None):
         """
@@ -137,6 +151,7 @@ class MyAgent(BaseAgent):
             
             if wind_mag > 0:
                 cos_theta = (ax * wx + ay * wy) / (a_mag * wind_mag)
+                
                 if cos_theta >= no_go_threshold:
                     valid_actions.append(i)
             else:
@@ -167,31 +182,37 @@ class MyAgent(BaseAgent):
         else:
             self.last_efficiency = 0.0
 
-        # Store current position for progress reward calculation
-        self.last_position = (observation[0], observation[1])
+        # Calculate VMG for reward shaping
+        self.last_vmg = self._calculate_vmg(observation)
 
         return action
 
-    def learn(self, state, action, reward, next_state, next_observation=None):
+    def learn(self, state, action, reward, next_state):
         if state not in self.q_table:
             self.q_table[state] = self.np_random.random(9) * self.q_init_high
         if next_state not in self.q_table:
             self.q_table[next_state] = self.np_random.random(9) * self.q_init_high
 
-        # Classic Bellman update
-        td_target = reward + self.discount_factor * np.nanmax(self.q_table[next_state])
-        td_error = td_target - self.q_table[state][action]
-        self.q_table[state][action] += self.learning_rate * td_error
+        # Efficiency bonus (polar diagram)
+        efficiency_bonus = self.last_efficiency * 0.5
         
-        # Epsilon decay after each learning step
-        if self.exploration_rate > self.epsilon_min:
-            self.exploration_rate *= self.epsilon_decay
+        # NEW: VMG bonus - reward moving fast towards the goal
+        # Scaled by 2.0 as suggested, but can be tuned
+        vmg_bonus = self.last_vmg * 2.0
+        
+        # Combined shaped reward
+        shaped_reward = reward + efficiency_bonus + vmg_bonus
+        
+        # Q-learning update (Bellman equation)
+        td_target = shaped_reward + self.discount_factor * np.nanmax(self.q_table[next_state])
+        td_error = td_target - self.q_table[state][action]
+
+        self.q_table[state][action] += self.learning_rate * td_error
 
     def reset(self):
         self.last_state = None
         self.last_action = None
-        self.last_position = None
-        self.last_efficiency = 0.0
+        self.last_vmg = 0.0
 
     def seed(self, seed=None):
         self.np_random = np.random.default_rng(seed)

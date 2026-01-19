@@ -1,0 +1,7 @@
+{
+  "metadata": {
+    "agent": null,
+    "timestamp": "20260120_001100",
+    "command": "Scripts/run_pipeline.py eval --model vmg_agent_simple_static_20260119_ --scenario simple_static"
+  }
+}

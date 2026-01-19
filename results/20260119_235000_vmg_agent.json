@@ -1,0 +1,43 @@
+{
+  "hyperparameters": {
+    "learning_rate": 0.15,
+    "discount_factor": 0.99,
+    "exploration_rate": 0.05,
+    "position_bins": 10,
+    "velocity_bins": 5,
+    "wind_bins": 8,
+    "wind_preview_steps": 3,
+    "grid_size": 32,
+    "q_init_high": 10.0
+  },
+  "training": {
+    "scenarios": [
+      "simple_static"
+    ],
+    "episodes": 2000,
+    "final_success_rate": 0.5,
+    "avg_reward": 276.95841931627336,
+    "avg_steps": 386.9175,
+    "q_table_size": 5716,
+    "scenario_metrics": {
+      "simple_static": {
+        "success_rate": 50.0,
+        "avg_reward": 276.9584193162732,
+        "avg_steps": 386.9175
+      }
+    }
+  },
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/vmg_agent_simple_static_20260119_234708.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/vmg_agent_exported_20260119_234959.py",
+  "evaluation": {
+    "simple_static": {
+      "output": "",
+      "success": false
+    }
+  },
+  "metadata": {
+    "agent": "vmg_agent",
+    "timestamp": "20260119_235000",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent vmg_agent --scenario simple_static --episodes 2000"
+  }
+}

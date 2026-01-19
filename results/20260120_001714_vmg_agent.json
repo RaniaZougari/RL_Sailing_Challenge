@@ -1,0 +1,14 @@
+{
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/vmg_agent_exported_20260120_001713.py",
+  "evaluation": {
+    "simple_static": {
+      "output": "",
+      "success": false
+    }
+  },
+  "metadata": {
+    "agent": "vmg_agent",
+    "timestamp": "20260120_001714",
+    "command": "Scripts/run_pipeline.py eval --agent vmg_agent --model src/models/vmg_agent_simple_static_20260119_234708.pkl --scenario simple_static"
+  }
+}
