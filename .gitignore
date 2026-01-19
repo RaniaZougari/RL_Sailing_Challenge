@@ -1,3 +1,4 @@
-sailing-env
-training_viz
+sailing-env/
+training_viz/
 *.pkl
+__pycache__/
