@@ -1,0 +1,43 @@
+{
+  "hyperparameters": {
+    "learning_rate": 0.15,
+    "discount_factor": 0.99,
+    "exploration_rate": 0.3,
+    "position_bins": 10,
+    "velocity_bins": 5,
+    "wind_bins": 8,
+    "wind_preview_steps": 3,
+    "grid_size": 32,
+    "q_init_high": 10.0
+  },
+  "training": {
+    "scenarios": [
+      "simple_static"
+    ],
+    "episodes": 2000,
+    "final_success_rate": 0.0,
+    "avg_reward": 71.43283545155666,
+    "avg_steps": 500.0,
+    "q_table_size": 4334,
+    "scenario_metrics": {
+      "simple_static": {
+        "success_rate": 0.0,
+        "avg_reward": 71.43283545155668,
+        "avg_steps": 500.0
+      }
+    }
+  },
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/physic_wind_improved_simple_static_20260119_232709.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/physic_wind_improved_exported_20260119_233047.py",
+  "evaluation": {
+    "simple_static": {
+      "output": "",
+      "success": false
+    }
+  },
+  "metadata": {
+    "agent": "physic_wind_improved",
+    "timestamp": "20260119_233047",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent physic_wind_improved --scenario simple_static --episodes 2000"
+  }
+}

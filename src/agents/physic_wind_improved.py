@@ -1,5 +1,10 @@
 """
-Agent combining Q-Learning with physical sailing rules for improved navigation.
+Improved Agent combining Q-Learning with physical sailing rules.
+Enhancements:
+- Goal direction in state representation
+- Distance-based reward shaping (progress reward)
+- Increased efficiency bonus
+- Epsilon decay during training
 """
 
 import numpy as np
@@ -15,15 +20,23 @@ class MyAgent(BaseAgent):
         # Learning parameters
         self.learning_rate = 0.15   # alpha
         self.discount_factor = 0.99  # gamma
-        # Epsilon
-        self.exploration_rate = 0.05
+        
+        # Epsilon - start higher for better exploration during training
+        self.exploration_rate = 0.1
+        self.epsilon_min = 0.05
+        self.epsilon_decay = 0.995
 
         # Discretization parameters
         self.position_bins = 10
         self.velocity_bins = 5
         self.wind_bins = 8
+        self.goal_direction_bins = 8  # NEW: bins for direction to goal
         self.wind_preview_steps = 3
         self.grid_size = 32
+        
+        # Goal position (top center of grid)
+        self.goal_x = 16
+        self.goal_y = 31
         
         # Q-table
         self.q_table = {}
@@ -31,6 +44,7 @@ class MyAgent(BaseAgent):
         
         # State for learning
         self.last_efficiency = 0.0
+        self.last_position = None  # Track position for progress reward
 
     def _action_to_direction(self, action):
         """Convert action index to direction vector."""
@@ -40,7 +54,6 @@ class MyAgent(BaseAgent):
             (0, 0)
         ]
         return np.array(directions[action])
-
 
     def discretize_state(self, observation):
         """Discretize the continuous observation into a tuple state."""
@@ -61,6 +74,12 @@ class MyAgent(BaseAgent):
 
         wind_angle = np.arctan2(wy, wx)
         wind_bin = int(((wind_angle + np.pi) / (2 * np.pi)) * self.wind_bins) % self.wind_bins
+
+        # NEW: Direction to goal (helps agent know where to go)
+        goal_dx = self.goal_x - x
+        goal_dy = self.goal_y - y
+        goal_angle = np.arctan2(goal_dy, goal_dx)
+        goal_dir_bin = int(((goal_angle + np.pi) / (2 * np.pi)) * self.goal_direction_bins) % self.goal_direction_bins
 
         wind_grid = wind_flattened.reshape(32, 32, 2)
         gx, gy = int(x), int(y)
@@ -86,7 +105,8 @@ class MyAgent(BaseAgent):
                 int(((ang + np.pi) / (2 * np.pi)) * self.wind_bins) % self.wind_bins
             )
 
-        return (x_bin, y_bin, v_bin, wind_bin, *preview_bins)
+        # Include goal_dir_bin in state
+        return (x_bin, y_bin, v_bin, wind_bin, goal_dir_bin, *preview_bins)
 
     def act(self, observation, info=None):
         """
@@ -109,50 +129,36 @@ class MyAgent(BaseAgent):
         ] # Actions 0-7
         
         # Threshold for no-go zone (approx 45 degrees)
-        # Cos(135 deg) = -0.707. 
-        # If cos(theta) < -0.707, it means theta > 135 or theta < -135 (towards opposite of wind)
         no_go_threshold = -0.707
 
         for i in range(8):
             ax, ay = action_vectors[i]
-            # Normalize action vector (actions 1,3,5,7 have length sqrt(2))
             a_mag = np.sqrt(ax**2 + ay**2)
             
             if wind_mag > 0:
-                # Dot product divided by magnitudes = cos(theta)
                 cos_theta = (ax * wx + ay * wy) / (a_mag * wind_mag)
-                
-                # Check if we are sailing INTO the wind (against it)
-                # Wind blows FROM source TO destination.
-                # Disallow if boat vector opposes wind vector
                 if cos_theta >= no_go_threshold:
                     valid_actions.append(i)
             else:
-                # If no wind, all directions valid
                 valid_actions.append(i)
                 
         valid_actions.append(8) # Stay is always valid
 
         # --- Epsilon-greedy ---
         if self.np_random.random() < self.exploration_rate:
-            # Exploration: random valid action
             action = self.np_random.choice(valid_actions)
         else:
-            # Exploitation: best valid action
             q_values = self.q_table[state].copy()
-            # Mask invalid actions with -infinity
             mask = np.full(9, -np.inf)
             mask[valid_actions] = 0
             masked_q_values = q_values + mask
             action = np.nanargmax(masked_q_values)
 
-        # Calculate efficiency of the chosen action to use in learning
-        if action < 8: # If moving
+        # Calculate efficiency of the chosen action
+        if action < 8:
             action_vec = self._action_to_direction(action)
-            # Normalize
             action_vec = action_vec / np.linalg.norm(action_vec)
             
-            # Wind vector from observation
             wind_vec = np.array([wx, wy])
             if wind_mag > 0:
                 wind_vec = wind_vec / wind_mag
@@ -161,28 +167,31 @@ class MyAgent(BaseAgent):
         else:
             self.last_efficiency = 0.0
 
+        # Store current position for progress reward calculation
+        self.last_position = (observation[0], observation[1])
+
         return action
 
-    def learn(self, state, action, reward, next_state):
+    def learn(self, state, action, reward, next_state, next_observation=None):
         if state not in self.q_table:
             self.q_table[state] = self.np_random.random(9) * self.q_init_high
         if next_state not in self.q_table:
             self.q_table[next_state] = self.np_random.random(9) * self.q_init_high
 
-        # classic bellman
-        # Add efficiency bonus to reward
-        efficiency_bonus = self.last_efficiency * 0.5
-        shaped_reward = reward + efficiency_bonus
-        
-        td_target = shaped_reward + self.discount_factor * np.nanmax(self.q_table[next_state])
+        # Classic Bellman update
+        td_target = reward + self.discount_factor * np.nanmax(self.q_table[next_state])
         td_error = td_target - self.q_table[state][action]
-
         self.q_table[state][action] += self.learning_rate * td_error
-
+        
+        # Epsilon decay after each learning step
+        if self.exploration_rate > self.epsilon_min:
+            self.exploration_rate *= self.epsilon_decay
 
     def reset(self):
         self.last_state = None
         self.last_action = None
+        self.last_position = None
+        self.last_efficiency = 0.0
 
     def seed(self, seed=None):
         self.np_random = np.random.default_rng(seed)
