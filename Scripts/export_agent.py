@@ -2,15 +2,15 @@ import os
 import sys
 sys.path.append(".")
 
-from agents.my_agent_DQ import MyAgent
+from agents.my_agent_physics import MyAgent
 from utils.agent_utils import save_qlearning_agent
 
 agent = MyAgent()
 
 # IMPORTANT: load trained Q-table
-agent.load("models/trainedDQ_FINAL2.pkl")
+agent.load("models/physics_agent.pkl")
 
-output_file = "Submission_agents/trained_FINAL_mieux.py"
+output_file = "Submission_agents/my_physics_agent.py"
 
 
 

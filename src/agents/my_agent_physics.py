@@ -33,106 +33,7 @@ class MyAgent(BaseAgent):
         # Q-table
         self.q_table = {}
         self.initial_q_value = 10.0
-        
-        # SARSA
-        self.last_state = None
-        self.last_action = None
-        
-        # Weighting between Q-learning and physics
-        self.physics_weight = 0.5  # 50% physics, 50% Q-learning
 
-    def get_sailing_efficiency(self, wind_angle):
-        """
-        Calculate sailing efficiency based on wind angle.
-        wind_angle: angle between boat direction and wind direction (radians)
-        Returns a score between 0 and 1.
-        """
-        abs_angle = abs(wind_angle)
-        
-        # No-Go Zone (0-45°)
-        if abs_angle < self.NO_GO_ANGLE:
-            return 0.05  # Très inefficace
-        
-        # Close-Hauled (45-60°)
-        elif abs_angle < np.radians(60):
-            # Interpolation linéaire de 0.5 à 0.7
-            t = (abs_angle - self.NO_GO_ANGLE) / (np.radians(60) - self.NO_GO_ANGLE)
-            return 0.5 + t * 0.2
-        
-        # Beam Reach (60-120°) - optimal
-        elif abs_angle < np.radians(120):
-            # Interpolation de 0.7 à 1.0 à 90°, puis 1.0 à 0.7
-            if abs_angle < self.BEAM_REACH_ANGLE:
-                t = (abs_angle - np.radians(60)) / (self.BEAM_REACH_ANGLE - np.radians(60))
-                return 0.7 + t * 0.3
-            else:
-                t = (abs_angle - self.BEAM_REACH_ANGLE) / (np.radians(120) - self.BEAM_REACH_ANGLE)
-                return 1.0 - t * 0.3
-        
-        # Broad Reach (120-150°)
-        elif abs_angle < np.radians(150):
-            t = (abs_angle - np.radians(120)) / (np.radians(150) - np.radians(120))
-            return 0.7 - t * 0.2
-        
-        # Running (150-180°)
-        else:
-            return 0.5
-
-    def get_physics_score(self, action, observation):
-        """
-        Chooses an action based on physical sailing principles.
-        """
-        x, y = observation[0], observation[1]
-        wx, wy = observation[4], observation[5]
-        
-        # Direction towards the goal
-        goal_x, goal_y = 16, 31
-        dx = goal_x - x
-        dy = goal_y - y
-        
-        if abs(dx) < 0.1 and abs(dy) < 0.1:
-            return 1.0 if action == 8 else 0.0  # Stay if at goal
-        
-        goal_angle = np.arctan2(dy, dx)
-        wind_angle = np.arctan2(wy, wx)
-        
-        # Action angles (radians)
-        action_angles = [
-            np.radians(90),   # 0: North
-            np.radians(45),   # 1: NE
-            np.radians(0),    # 2: East
-            np.radians(-45),  # 3: SE
-            np.radians(-90),  # 4: South
-            np.radians(-135), # 5: SW
-            np.radians(180),  # 6: West
-            np.radians(135),  # 7: NW
-            goal_angle        # 8: Stay (direction au but)
-        ]
-        
-        action_angle = action_angles[action]
-        
-        # Scoring components
-        angle_to_goal = abs(((action_angle - goal_angle + np.pi) % (2*np.pi)) - np.pi)
-        direction_score = np.cos(angle_to_goal)  # 1 si aligné et 0 si perpendiculaire
-        
-        # Efficiency score based on wind angle
-        wind_relative_angle = ((action_angle - wind_angle + np.pi) % (2*np.pi)) - np.pi
-        efficiency_score = self.get_sailing_efficiency(wind_relative_angle)
-        
-        # Penality if staying
-        stay_penalty = 0.5 if action == 8 else 1.0
-        
-        # Combine scores
-        physics_score = (direction_score * 0.5 + efficiency_score * 0.5) * stay_penalty
-        
-        return physics_score
-
-    def get_best_action_physics(self, observation):
-        """
-        Gets the best action purely based on physics scoring.
-        """
-        scores = np.array([self.get_physics_score(a, observation) for a in range(9)])
-        return np.argmax(scores)
 
     def discretize_state(self, observation):
         """Discretize the continuous observation into a tuple state."""
@@ -191,27 +92,10 @@ class MyAgent(BaseAgent):
 
         # Epsilon-greedy with physics guidance
         if self.np_random.random() < self.exploration_rate:
-            # Exploration : 50% Q-learning, 50% physique
-            if self.np_random.random() < 0.5:
-                action = self.get_best_action_physics(observation)
-            else:
-                action = self.np_random.integers(0, 9)
+            # Exploration: random
+            action = self.np_random.integers(0, 9)
         else:
-            # Exploitation : combine Q-values et physique
-            q_values = self.q_table[state].copy()
-            
-            # Boost des Q-values selon la physique
-            for a in range(9):
-                physics_score = self.get_physics_score(a, observation)
-                # Combine scores
-                q_values[a] = (1 - self.physics_weight) * q_values[a] + \
-                              self.physics_weight * physics_score * 100
-            
-            action = np.argmax(q_values)
-
-        # SARSA
-        self.last_state = state
-        self.last_action = action
+            action = np.nanargmax(self.q_table[state])
 
         return action
 
