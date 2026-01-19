@@ -1,0 +1,43 @@
+{
+  "hyperparameters": {
+    "learning_rate": 0.15,
+    "discount_factor": 0.99,
+    "exploration_rate": 0.05,
+    "position_bins": 10,
+    "velocity_bins": 5,
+    "wind_bins": 8,
+    "wind_preview_steps": 3,
+    "grid_size": 32,
+    "q_init_high": 10.0
+  },
+  "training": {
+    "scenarios": [
+      "simple_static"
+    ],
+    "episodes": 300,
+    "final_success_rate": 0.03333333333333333,
+    "avg_reward": 105.62785608818263,
+    "avg_steps": 493.69666666666666,
+    "q_table_size": 3586,
+    "scenario_metrics": {
+      "simple_static": {
+        "success_rate": 3.3333333333333335,
+        "avg_reward": 105.62785608818264,
+        "avg_steps": 493.69666666666666
+      }
+    }
+  },
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/physic_wind_with_optimal_angle_simple_static_20260119_221801.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/physic_wind_with_optimal_angle_exported_20260119_221847.py",
+  "evaluation": {
+    "simple_static": {
+      "output": "",
+      "success": false
+    }
+  },
+  "metadata": {
+    "agent": "physic_wind_with_optimal_angle",
+    "timestamp": "20260119_221847",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent physic_wind_with_optimal_angle --scenario simple_static --episodes 300"
+  }
+}

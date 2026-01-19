@@ -224,6 +224,9 @@ class SailingEnv(gym.Env): # type: ignore
             [self.grid_size[0]-1, self.grid_size[1]-1]
         )
         
+        # Calculate previous distance for reward shaping
+        prev_dist = np.linalg.norm(self.position - self.goal_position)
+        
         # Update position
         self.position = new_position
         
@@ -235,7 +238,7 @@ class SailingEnv(gym.Env): # type: ignore
         reached_goal = distance_to_goal < 1.5
         
         # Calculate reward
-        reward = self._calculate_reward(reached_goal, distance_to_goal)
+        reward = self._calculate_reward(reached_goal, distance_to_goal, prev_dist)
         
         # Determine if episode is done
         terminated = reached_goal or self.step_count >= 1000  # Increased from 200 to 1000
@@ -637,21 +640,34 @@ class SailingEnv(gym.Env): # type: ignore
         
         return new_velocity
     
-    def _calculate_reward(self, reached_goal, distance_to_goal):
+    def _calculate_reward(self, reached_goal, distance_to_goal, prev_distance=None):
         """
         Calculate reward based on current state.
         
         Args:
             reached_goal: Boolean indicating if the goal was reached
             distance_to_goal: Current distance to the goal
+            prev_distance: Previous distance to the goal (for shaping)
             
         Returns:
-            reward: 100 if goal reached, negative distance penalty otherwise
+            reward: Shaped reward
         """
         if reached_goal:
             return 100.0
-        # Simple dense reward: penalized by distance to goal
-        return min(100 / distance_to_goal, 99)
+            
+        if prev_distance is not None:
+            # Reward shaping: reward progress towards goal
+            # Positive if getting closer, negative if moving away
+            # Multiplier 10 makes the signal stronger
+            progress = (prev_distance - distance_to_goal)
+            
+            # Small step penalty to encourage speed
+            step_penalty = 0.05
+            
+            return progress * 10.0 - step_penalty
+            
+        # Fallback to sparse reward if no prev_distance provided
+        return -0.1
     
     def _get_observation(self):
         """

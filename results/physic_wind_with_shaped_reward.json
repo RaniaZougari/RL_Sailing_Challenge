@@ -1,0 +1,43 @@
+{
+  "hyperparameters": {
+    "learning_rate": 0.15,
+    "discount_factor": 0.8,
+    "exploration_rate": 0.05,
+    "position_bins": 10,
+    "velocity_bins": 5,
+    "wind_bins": 8,
+    "wind_preview_steps": 3,
+    "grid_size": 32,
+    "q_init_high": 10.0
+  },
+  "training": {
+    "scenarios": [
+      "simple_static"
+    ],
+    "episodes": 300,
+    "final_success_rate": 0.7033333333333334,
+    "avg_reward": 313.1182400921724,
+    "avg_steps": 291.66333333333336,
+    "q_table_size": 4506,
+    "scenario_metrics": {
+      "simple_static": {
+        "success_rate": 70.33333333333334,
+        "avg_reward": 313.11824009217247,
+        "avg_steps": 291.66333333333336
+      }
+    }
+  },
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/my_agent_physics_simple_static_20260119_220958.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/my_agent_physics_exported_20260119_221019.py",
+  "evaluation": {
+    "simple_static": {
+      "output": "",
+      "success": false
+    }
+  },
+  "metadata": {
+    "agent": "my_agent_physics",
+    "timestamp": "20260119_221019",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent my_agent_physics --scenario simple_static --episodes 300"
+  }
+}

@@ -20,7 +20,7 @@ def train_agent(
     agent,
     wind_scenarios,  # Can be a string or a list of strings
     num_episodes=1000,
-    max_steps=400,
+    max_steps=500,
     save_path="models/trained_agent.pkl",
     seed=42,
 ):

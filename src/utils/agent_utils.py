@@ -123,7 +123,7 @@ def save_qlearning_agent(agent, output_path, agent_class_name="QLearningTrainedA
     
     # Methods to extract from source
     methods_to_extract = [
-        'discretize_state', 'act', 'learn', 'reset', 'seed', 'save', 'load'
+        'discretize_state', 'act', 'learn', 'reset', 'seed', 'save', 'load', '_action_to_direction'
     ]
     
     # Try to extract methods from source file if provided
@@ -147,6 +147,7 @@ Auto-generated from: {source_file if source_file else 'N/A'}
 
 import numpy as np
 from agents.base_agent import BaseAgent
+from src.sailing_physics import calculate_sailing_efficiency
 
 class {agent_class_name}(BaseAgent):
     """
