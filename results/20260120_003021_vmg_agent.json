@@ -1,0 +1,23 @@
+{
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/vmg_agent_exported_20260120_003010.py",
+  "evaluation": {
+    "simple_static": {
+      "success": true,
+      "success_rate": 0.87,
+      "mean_reward": 144.676985723654,
+      "mean_steps": 399.14,
+      "std_reward": 31.827837085980004,
+      "std_steps": 297.47537780461766,
+      "success_rate_std": 0,
+      "reward_std": 31.827837085980004,
+      "steps_std": 297.47537780461766,
+      "custom_score": 48.53276985723654,
+      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+    }
+  },
+  "metadata": {
+    "agent": "vmg_agent",
+    "timestamp": "20260120_003021",
+    "command": "Scripts/run_pipeline.py eval --agent vmg_agent --model src/models/vmg_agent_simple_static_20260119_234708.pkl --scenario simple_static"
+  }
+}

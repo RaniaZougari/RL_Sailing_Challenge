@@ -123,7 +123,7 @@ def save_qlearning_agent(agent, output_path, agent_class_name="QLearningTrainedA
     
     # Methods to extract from source
     methods_to_extract = [
-        'discretize_state', 'act', 'learn', 'reset', 'seed', 'save', 'load', '_action_to_direction'
+        'discretize_state', 'act', 'learn', 'reset', 'seed', 'save', 'load', '_action_to_direction', '_calculate_vmg'
     ]
     
     # Try to extract methods from source file if provided

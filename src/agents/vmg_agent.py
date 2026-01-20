@@ -66,31 +66,7 @@ class MyAgent(BaseAgent):
         wind_angle = np.arctan2(wy, wx)
         wind_bin = int(((wind_angle + np.pi) / (2 * np.pi)) * self.wind_bins) % self.wind_bins
 
-        wind_grid = wind_flattened.reshape(32, 32, 2)
-        gx, gy = int(x), int(y)
-
-        preview_offsets = [
-            (-self.wind_preview_steps, 0),
-            (self.wind_preview_steps, 0),
-            (0, self.wind_preview_steps),
-            (0, -self.wind_preview_steps),
-            (-self.wind_preview_steps, self.wind_preview_steps),
-            (-self.wind_preview_steps, -self.wind_preview_steps),
-            (self.wind_preview_steps, self.wind_preview_steps),
-            (self.wind_preview_steps, -self.wind_preview_steps),
-        ]
-
-        preview_bins = []
-        for dx, dy in preview_offsets:
-            xp = np.clip(gx + dx, 0, 31)
-            yp = np.clip(gy + dy, 0, 31)
-            wxp, wyp = wind_grid[xp, yp]
-            ang = np.arctan2(wyp, wxp)
-            preview_bins.append(
-                int(((ang + np.pi) / (2 * np.pi)) * self.wind_bins) % self.wind_bins
-            )
-
-        return (x_bin, y_bin, v_bin, wind_bin, *preview_bins)
+        return (x_bin, y_bin, v_bin, wind_bin)
 
     def _calculate_vmg(self, observation):
         """

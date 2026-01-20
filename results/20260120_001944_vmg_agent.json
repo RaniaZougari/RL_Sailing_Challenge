@@ -1,0 +1,14 @@
+{
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/vmg_agent_exported_20260120_001942.py",
+  "evaluation": {
+    "simple_static": {
+      "output": "Loaded agent: MyAgentTrained\n\nEvaluating on 1 wind scenarios with 100 seeds\nAgent: MyAgentTrained\nMaximum steps per episode: 1000\n\nWIND_SCENARIO    | SUCCESS RATE | MEAN REWARD       | MEAN STEPS\n---------------------------------------------------------------------------\n\u274c Error evaluating on wind scenario simple_static: 'MyAgentTrained' object has no attribute '_calculate_vmg'\n---------------------------------------------------------------------------\n",
+      "success": true
+    }
+  },
+  "metadata": {
+    "agent": "vmg_agent",
+    "timestamp": "20260120_001944",
+    "command": "Scripts/run_pipeline.py eval --agent vmg_agent --model src/models/vmg_agent_simple_static_20260119_234708.pkl --scenario simple_static"
+  }
+}
