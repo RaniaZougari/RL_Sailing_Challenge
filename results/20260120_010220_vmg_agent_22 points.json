@@ -27,8 +27,8 @@
       }
     }
   },
-  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/vmg_agent_simple_static_20260120_010119.pkl",
-  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/vmg_agent_exported_20260120_010218.py",
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/vmg_agent_simple_static_20260120_010119_22_points.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/vmg_agent_exported_20260120_010218_22_points.py",
   "evaluation": {
     "simple_static": {
       "success": true,
