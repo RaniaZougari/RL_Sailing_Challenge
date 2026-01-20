@@ -7,7 +7,7 @@ Auto-generated from: /home/unmars/Downloads/RL_Sailing_Challenge/src/agents/vmg_
 """
 
 import numpy as np
-from evaluator.base_agent import BaseAgent
+from agents.base_agent import BaseAgent
 
 def calculate_sailing_efficiency(boat_direction, wind_direction):
     """
