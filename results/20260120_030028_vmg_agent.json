@@ -83,6 +83,26 @@
       "custom_score": 36.865359348954115,
       "custom_score_formula": "100 * 0.99^steps * success_rate",
       "previous_custom_score": 91.95285572823629
+    },
+    "simple_static": {
+      "success_rate": 0.52,
+      "mean_reward": 103.87149541654648,
+      "mean_steps": 784.77,
+      "std_reward": 38.674318435181505,
+      "std_steps": 308.43520729644337,
+      "success": true,
+      "custom_score": 0.01952697669557183,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
+    },
+    "static_headwind": {
+      "success_rate": 0.32,
+      "mean_reward": 21.09292212002025,
+      "mean_steps": 997.75,
+      "std_reward": 31.79960446194084,
+      "std_steps": 18.793283374652763,
+      "success": true,
+      "custom_score": 0.0014130755696117139,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
     }
   },
   "metadata": {

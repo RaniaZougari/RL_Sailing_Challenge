@@ -103,6 +103,16 @@
       "custom_score": 24.33931550618364,
       "custom_score_formula": "100 * 0.99^steps * success_rate",
       "previous_custom_score": 88.01282027832251
+    },
+    "training_3": {
+      "success_rate": 1.0,
+      "mean_reward": 132.53723409756347,
+      "mean_steps": 169.62,
+      "std_reward": 47.83949543546991,
+      "std_steps": 45.180256750045146,
+      "success": true,
+      "custom_score": 18.182002269432086,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
     }
   },
   "metadata": {
