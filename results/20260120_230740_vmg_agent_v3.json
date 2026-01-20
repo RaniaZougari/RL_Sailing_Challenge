@@ -1,0 +1,83 @@
+{
+  "agent_source_backup": "/home/unmars/Downloads/RL_Sailing_Challenge/src/agents/archive/vmg_agent_v3_20260120_230651.py",
+  "hyperparameters": {
+    "learning_rate": 0.15,
+    "discount_factor": 0.99,
+    "exploration_rate": 0.5,
+    "position_bins": 10,
+    "velocity_bins": 5,
+    "wind_bins": 8,
+    "grid_size": 32,
+    "q_init_high": 2.0
+  },
+  "training": {
+    "scenarios": [
+      "simple_static",
+      "static_headwind",
+      "training_1",
+      "training_2",
+      "training_3"
+    ],
+    "episodes": 500,
+    "final_success_rate": 0.9684,
+    "avg_reward": 381.4820929538683,
+    "avg_steps": 108.658,
+    "q_table_size": 2475,
+    "scenario_metrics": {
+      "simple_static": {
+        "success_rate": 92.80000000000001,
+        "avg_reward": 373.5996892060051,
+        "avg_steps": 148.258
+      },
+      "static_headwind": {
+        "success_rate": 91.60000000000001,
+        "avg_reward": 367.473537257871,
+        "avg_steps": 154.592
+      },
+      "training_1": {
+        "success_rate": 99.8,
+        "avg_reward": 388.94245188852756,
+        "avg_steps": 97.256
+      },
+      "training_2": {
+        "success_rate": 100.0,
+        "avg_reward": 388.00375361886597,
+        "avg_steps": 61.916
+      },
+      "training_3": {
+        "success_rate": 100.0,
+        "avg_reward": 389.3910327980858,
+        "avg_steps": 81.268
+      }
+    }
+  },
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/vmg_agent_v3_multi_5scenarios_20260120_230651.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/vmg_agent_v3_exported_20260120_230736.py",
+  "evaluation": {
+    "simple_static": {
+      "output": "\u274c Error: name 'INITIAL_LEARNING_RATE' is not defined\n",
+      "success": false
+    },
+    "static_headwind": {
+      "output": "\u274c Error: name 'INITIAL_LEARNING_RATE' is not defined\n",
+      "success": false
+    },
+    "training_1": {
+      "output": "\u274c Error: name 'INITIAL_LEARNING_RATE' is not defined\n",
+      "success": false
+    },
+    "training_2": {
+      "output": "\u274c Error: name 'INITIAL_LEARNING_RATE' is not defined\n",
+      "success": false
+    },
+    "training_3": {
+      "output": "\u274c Error: name 'INITIAL_LEARNING_RATE' is not defined\n",
+      "success": false
+    }
+  },
+  "metadata": {
+    "agent": "vmg_agent_v3",
+    "timestamp": "20260120_230740",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent vmg_agent_v3 --scenario simple_static static_headwind training_1 training_2 training_3 --episodes 500"
+  }
+}

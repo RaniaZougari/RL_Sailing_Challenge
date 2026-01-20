@@ -23,7 +23,7 @@ class MyAgent(BaseAgent):
         # Learning parameters with decay
 
         self.INITIAL_EXPLORATION_RATE = 0.20
-        self.INITIAL_LEARNING_RATE = 0.35
+        self.INITIAL_LEARNING_RATE = 0.20
         
         self.learning_rate = self.INITIAL_LEARNING_RATE         # alpha - start high
         self.min_learning_rate = 0.05    # minimum alpha

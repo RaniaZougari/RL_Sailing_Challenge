@@ -21,18 +21,14 @@ class MyAgent(BaseAgent):
         self.np_random = np.random.default_rng()
 
         # Learning parameters with decay
-
-        self.INITIAL_EXPLORATION_RATE = 0.20
-        self.INITIAL_LEARNING_RATE = 0.35
-        
-        self.learning_rate = self.INITIAL_LEARNING_RATE         # alpha - start high
+        self.learning_rate = 0.15         # alpha - start high
         self.min_learning_rate = 0.05    # minimum alpha
         self.lr_decay_rate = 0.999       # decay per episode
         
         self.discount_factor = 0.99  # gamma
         
         # Epsilon with decay (per episode, not per step)
-        self.exploration_rate = self.INITIAL_EXPLORATION_RATE      # Start high for exploration
+        self.exploration_rate = 0.09      # Start high for exploration
         self.min_exploration = 0.01      # Minimum epsilon
         self.eps_decay_rate = 0.995      # Decay per episode (slower)
 
@@ -291,12 +287,6 @@ class MyAgent(BaseAgent):
 
         self.q_table[state][action] += self.learning_rate * td_error
 
-    def decay(self):
-        self.exploration_rate = max(self.min_exploration, 
-                                    self.exploration_rate * self.eps_decay_rate)
-        self.learning_rate = max(self.min_learning_rate,
-                                 self.learning_rate * self.lr_decay_rate)
-
     def reset(self):
         """Reset episode-level state."""
         self.last_position = None
@@ -304,8 +294,11 @@ class MyAgent(BaseAgent):
         self.last_vmg = 0.0
         self.last_efficiency = 0.0
         
-        self.exploration_rate = self.INITIAL_EXPLORATION_RATE
-        self.learning_rate = self.INITIAL_LEARNING_RATE
+        # Decay epsilon and learning rate (per episode)
+        self.exploration_rate = max(self.min_exploration, 
+                                    self.exploration_rate * self.eps_decay_rate)
+        self.learning_rate = max(self.min_learning_rate,
+                                 self.learning_rate * self.lr_decay_rate)
 
     def seed(self, seed=None):
         self.np_random = np.random.default_rng(seed)

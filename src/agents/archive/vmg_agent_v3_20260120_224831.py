@@ -10,26 +10,22 @@ import numpy as np
 from agents.base_agent import BaseAgent
 from src.sailing_physics import calculate_sailing_efficiency
 
-
 class MyAgent(BaseAgent):
     def __init__(self):
         super().__init__()
         self.np_random = np.random.default_rng()
 
         # Learning parameters
-        self.INITIAL_LEARNING_RATE = 0.15
-        self.INITIAL_EXPLORATION_RATE = 0.5
-
-        self.learning_rate = self.INITIAL_LEARNING_RATE
+        self.learning_rate = 0.15
         self.min_learning_rate = 0.05
         self.lr_decay_rate = 0.999
         
         self.discount_factor = 0.99
         
         # Exploration
-        self.exploration_rate = self.INITIAL_EXPLORATION_RATE      # Start higher to explore new state space
-        self.min_exploration = 0.05
-        self.eps_decay_rate = 0.995
+        self.exploration_rate = 1.0      # Start higher to explore new state space
+        self.min_exploration = 0.1
+        self.eps_decay_rate = 0.9
 
         # Discretization
         self.position_bins = 10
@@ -42,6 +38,7 @@ class MyAgent(BaseAgent):
         self.q_init_high = 2.0  # Lower initialization
         
         # Tracking
+        self.last_efficiency = 0.0
         self.epsilon = 1e-6
 
     def _action_to_direction(self, action):
@@ -108,12 +105,31 @@ class MyAgent(BaseAgent):
             (0, 1), (1, 1), (1, 0), (1, -1),
             (0, -1), (-1, -1), (-1, 0), (-1, 1)
         ]
+        no_go_threshold = -0.707
+
+        for i in range(8):
+            ax, ay = action_vectors[i]
+            a_mag = np.sqrt(ax**2 + ay**2)
+            
+            if wind_mag > self.epsilon:
+                # Check if action is in no-go zone relative to wind
+                cos_theta = (ax * wx + ay * wy) / (a_mag * wind_mag)
+                if cos_theta >= no_go_threshold:
+                    valid_actions.append(i)
+            else:
+                valid_actions.append(i)
+                
+        valid_actions.append(8) # Stay is always valid
+
         # --- Epsilon-greedy ---
         if self.np_random.random() < self.exploration_rate:
-            action = self.np_random.choice(9)
+            action = self.np_random.choice(valid_actions)
         else:
             q_values = self.q_table[state].copy()
-            action = np.nanargmax(q_values)
+            mask = np.full(9, -np.inf)
+            mask[valid_actions] = 0
+            masked_q_values = q_values + mask
+            action = np.nanargmax(masked_q_values)
 
         # Calculate efficiency for reward shaping
         if action < 8:
@@ -134,38 +150,21 @@ class MyAgent(BaseAgent):
         if next_state not in self.q_table:
             self.q_table[next_state] = self.np_random.random(9) * self.q_init_high
 
+        # Recalculate discrete state to be sure
+        # (Though 'state' passed in should be correct)
+
         # --- Reward Shaping ---
         # 1. Base Reward: From Environment (Progress * 10)
+        #    - Positive if moving closer to goal
+        #    - Negative if moving away
         
-        # 2. Efficiency Bonus: Calculate explicitly for the *current* action (no lag)
-        # Note: We need wind info. Since we don't store full obs in state, 
-        # we can't perfectly reconstruct exact wind from bins.
-        # However, for efficiency *shaping*, using the bin center or assuming a 
-        # reasonable default based on the state bin is tricky.
-        # BETTER APPROACH: Just rely on the environment's progress reward primarily.
-        # But if we want efficiency, we really should have passed it from act() or stored it properly.
-        # Given the limitations of the 'learn' signature in BaseAgent, we'll try to use a stored
-        # 'current_efficiency' that is updated correctly.
-        # BUT since we are fixing the code, let's just assume we CANNOT access observation here easily.
-        # Wait, BaseAgent.learn signature is fixed.
-        # Let's use a temporary attribute 'last_efficiency' but ensure it's not overwritten by 'act(next_obs)'.
-        # Actually, in SARSA loop: act(obs) -> env.step -> act(next_obs) -> learn.
-        # There is NO WAY to prevent act(next_obs) from overwriting if we use a single variable.
-        # SIMPLE FIX: Use a queue or two variables: `efficiency_action` and `efficiency_next_action`.
+        # 2. Efficiency Bonus: Encourage proper alignment with wind
+        efficiency_bonus = self.last_efficiency * 0.5
         
-        # Re-calc check: We don't have wind vector here. 
-        # We will assume the user simply accepts that we remove efficiency bonus if it's too hard to get right,
-        # OR we rely on the fact that High VMG CORRELATES with High Efficiency.
-        # The Environment Reward (VMG) is already 10 * Progress. 
-        # If we have VMG, we implicitly have efficiency.
-        # So let's simpliy: REMOVE explicit efficiency bonus and trust the dense VMG reward.
-        # This solves the lag bug completely.
-        
-        # 3. Step Penalty: Small cost to encourage speed
-        step_penalty = 0.5
+        # 3. Step Penalty: Small cost per step to encourage speed
+        step_penalty = 0.05
 
-        shaped_reward = reward - step_penalty
-        
+        shaped_reward = reward + efficiency_bonus - step_penalty
 
         # SARSA update
         td_target = shaped_reward + self.discount_factor * self.q_table[next_state][next_action]
@@ -173,15 +172,13 @@ class MyAgent(BaseAgent):
 
         self.q_table[state][action] += self.learning_rate * td_error
 
-    def decay(self):
         self.exploration_rate = max(self.min_exploration, 
                                     self.exploration_rate * self.eps_decay_rate)
         self.learning_rate = max(self.min_learning_rate,
                                  self.learning_rate * self.lr_decay_rate)
 
     def reset(self):
-        self.exploration_rate = self.INITIAL_EXPLORATION_RATE
-        self.learning_rate = self.INITIAL_LEARNING_RATE
+        self.last_efficiency = 0.0
         
 
     def seed(self, seed=None):

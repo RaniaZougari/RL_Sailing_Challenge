@@ -1,0 +1,121 @@
+{
+  "agent_source_backup": "/home/unmars/Downloads/RL_Sailing_Challenge/src/agents/archive/vmg_agent_v3_20260120_232625.py",
+  "hyperparameters": {
+    "learning_rate": 0.15,
+    "discount_factor": 0.99,
+    "exploration_rate": 0.5,
+    "position_bins": 10,
+    "velocity_bins": 5,
+    "wind_bins": 8,
+    "grid_size": 32,
+    "q_init_high": 2.0
+  },
+  "training": {
+    "scenarios": [
+      "training_1",
+      "training_2",
+      "training_3"
+    ],
+    "episodes": 1000,
+    "final_success_rate": 0.9996666666666667,
+    "avg_reward": 388.4739942968325,
+    "avg_steps": 88.63866666666667,
+    "q_table_size": 2397,
+    "scenario_metrics": {
+      "training_1": {
+        "success_rate": 99.9,
+        "avg_reward": 387.82541752607494,
+        "avg_steps": 100.03
+      },
+      "training_2": {
+        "success_rate": 100.0,
+        "avg_reward": 388.2922448829771,
+        "avg_steps": 90.526
+      },
+      "training_3": {
+        "success_rate": 100.0,
+        "avg_reward": 389.304320481459,
+        "avg_steps": 75.36
+      }
+    }
+  },
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/vmg_agent_v3_multi_3scenarios_20260120_232625.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/vmg_agent_v3_exported_20260120_232722.py",
+  "evaluation": {
+    "simple_static": {
+      "success": true,
+      "success_rate": 0.41,
+      "mean_reward": 79.51246033923778,
+      "mean_steps": 995.13,
+      "std_reward": 43.832477698291946,
+      "std_steps": 48.45588818709239,
+      "success_rate_std": 0,
+      "reward_std": 43.832477698291946,
+      "steps_std": 48.45588818709239,
+      "custom_score": 0.0018588102412036575,
+      "expected_score_100pct": 0.004533683515130872,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "static_headwind": {
+      "success": true,
+      "success_rate": 0.43,
+      "mean_reward": 31.620624319524044,
+      "mean_steps": 954.28,
+      "std_reward": 26.001351991374822,
+      "std_steps": 137.88459522368694,
+      "success_rate_std": 0,
+      "reward_std": 26.001351991374822,
+      "steps_std": 137.88459522368694,
+      "custom_score": 0.0029391513887310383,
+      "expected_score_100pct": 0.006835235787746601,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "training_1": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 154.1742008605299,
+      "mean_steps": 185.79,
+      "std_reward": 29.772111816404312,
+      "std_steps": 25.274214132194103,
+      "success_rate_std": 0,
+      "reward_std": 29.772111816404312,
+      "steps_std": 25.274214132194103,
+      "custom_score": 15.45477918334996,
+      "expected_score_100pct": 15.45477918334996,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "training_2": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 192.30693358799147,
+      "mean_steps": 195.01,
+      "std_reward": 50.459236056893104,
+      "std_steps": 85.24628965532752,
+      "success_rate_std": 0,
+      "reward_std": 50.459236056893104,
+      "steps_std": 85.24628965532752,
+      "custom_score": 14.087025425911317,
+      "expected_score_100pct": 14.087025425911317,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "training_3": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 172.7169093953099,
+      "mean_steps": 122.24,
+      "std_reward": 25.866519802487257,
+      "std_steps": 18.741462056093702,
+      "success_rate_std": 0,
+      "reward_std": 25.866519802487257,
+      "steps_std": 18.741462056093702,
+      "custom_score": 29.271581516989958,
+      "expected_score_100pct": 29.271581516989958,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    }
+  },
+  "metadata": {
+    "agent": "vmg_agent_v3",
+    "timestamp": "20260120_232751",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent vmg_agent_v3 --scenario training_1 training_2 training_3 --episodes 1000"
+  }
+}

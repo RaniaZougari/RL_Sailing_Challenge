@@ -27,6 +27,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import warnings
 warnings.filterwarnings('ignore')
 
+
 # Configuration des graphiques
 sns.set_style("whitegrid")
 plt.rcParams['figure.figsize'] = (12, 8)

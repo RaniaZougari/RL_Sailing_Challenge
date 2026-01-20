@@ -17,17 +17,14 @@ class MyAgent(BaseAgent):
         self.np_random = np.random.default_rng()
 
         # Learning parameters
-        self.INITIAL_LEARNING_RATE = 0.15
-        self.INITIAL_EXPLORATION_RATE = 0.5
-
-        self.learning_rate = self.INITIAL_LEARNING_RATE
+        self.learning_rate = 0.15
         self.min_learning_rate = 0.05
         self.lr_decay_rate = 0.999
         
         self.discount_factor = 0.99
         
         # Exploration
-        self.exploration_rate = self.INITIAL_EXPLORATION_RATE      # Start higher to explore new state space
+        self.exploration_rate = 0.5      # Start moderate
         self.min_exploration = 0.05
         self.eps_decay_rate = 0.995
 
@@ -108,23 +105,31 @@ class MyAgent(BaseAgent):
             (0, 1), (1, 1), (1, 0), (1, -1),
             (0, -1), (-1, -1), (-1, 0), (-1, 1)
         ]
+        no_go_threshold = -0.707
+
+        for i in range(8):
+            ax, ay = action_vectors[i]
+            a_mag = np.sqrt(ax**2 + ay**2)
+            
+            if wind_mag > self.epsilon:
+                # Check if action is in no-go zone relative to wind
+                cos_theta = (ax * wx + ay * wy) / (a_mag * wind_mag)
+                if cos_theta >= no_go_threshold:
+                    valid_actions.append(i)
+            else:
+                valid_actions.append(i)
+                
+        valid_actions.append(8) # Stay is always valid
+
         # --- Epsilon-greedy ---
         if self.np_random.random() < self.exploration_rate:
-            action = self.np_random.choice(9)
+            action = self.np_random.choice(valid_actions)
         else:
             q_values = self.q_table[state].copy()
-            action = np.nanargmax(q_values)
-
-        # Calculate efficiency for reward shaping
-        if action < 8:
-            action_vec = self._action_to_direction(action)
-            action_vec = action_vec / np.linalg.norm(action_vec)
-            wind_vec = np.array([wx, wy])
-            self.last_efficiency = self._calculate_sailing_efficiency_safe(
-                action_vec, wind_vec, wind_mag
-            )
-        else:
-            self.last_efficiency = 0.0
+            mask = np.full(9, -np.inf)
+            mask[valid_actions] = 0
+            masked_q_values = q_values + mask
+            action = np.nanargmax(masked_q_values)
 
         return action
 

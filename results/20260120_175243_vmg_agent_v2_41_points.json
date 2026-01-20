@@ -53,7 +53,7 @@
     }
   },
   "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/vmg_agent_v2_multi_5scenarios_20260120_175106.pkl",
-  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/vmg_agent_v2_exported_20260120_175226.py",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/vmg_agent_v2_exported_20260120_175226_41_points.py",
   "evaluation": {
     "simple_static": {
       "success": true,

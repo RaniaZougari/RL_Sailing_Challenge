@@ -20,7 +20,7 @@ def train_agent(
     agent,
     wind_scenarios,  # Can be a string or a list of strings
     num_episodes=1000,
-    max_steps=500,
+    max_steps=1000,
     save_path="models/trained_agent.pkl",
     seed=42,
 ):
@@ -98,7 +98,9 @@ def train_agent(
                     f"Success rate (last 10): {success_rate:.1f}% | "
                     f"Epsilon: {agent.exploration_rate:.3f}"
                 )
+            agent.decay()
 
+        agent.reset()
         # Store scenario metrics
         scenario_metrics[scenario_name] = {
             'success_rate': sum(scenario_success) / len(scenario_success) * 100,
@@ -115,7 +117,7 @@ def train_agent(
               f"Success={scenario_metrics[scenario_name]['success_rate']:.1f}%, "
               f"Reward={scenario_metrics[scenario_name]['avg_reward']:.1f}, "
               f"Steps={scenario_metrics[scenario_name]['avg_steps']:.1f}")
-
+        agent.exploration_rate
     training_time = time.time() - start_time
 
     # Save agent
