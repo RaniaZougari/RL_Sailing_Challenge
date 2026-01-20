@@ -1,6 +1,11 @@
 """
-Agent with VMG (Velocity Made Good) - Projected velocity towards goal.
-Based on physic_wind_with_optimal_angle.py with added VMG reward shaping.
+Agent with VMG (Velocity Made Good) - OPTIMIZED VERSION
+Optimizations to reduce number of steps:
+1. Increased step penalty
+2. Penalize stay action heavily
+3. Penalize direction changes
+4. Bonus for distance reduction
+5. Higher discretization resolution
 """
 
 import numpy as np
@@ -21,12 +26,12 @@ class MyAgent(BaseAgent):
         self.discount_factor = 0.99  # gamma
         
         # Epsilon with decay (per episode, not per step)
-        self.exploration_rate = 0.09      # Start high for exploration
+        self.exploration_rate = 0.05      # Start high for exploration
         self.min_exploration = 0.01      # Minimum epsilon
         self.eps_decay_rate = 0.995      # Decay per episode (slower)
 
-        # Discretization parameters
-        self.position_bins = 10
+        # Discretization parameters - INCREASED RESOLUTION
+        self.position_bins = 15  # Was 10
         self.velocity_bins = 5
         self.wind_bins = 8
         self.wind_preview_steps = 3
@@ -42,6 +47,8 @@ class MyAgent(BaseAgent):
         # State for learning
         self.last_efficiency = 0.0
         self.last_vmg = 0.0
+        self.last_distance = None
+        self.last_action = None  # Track last action for direction change penalty
 
     def _action_to_direction(self, action):
         """Convert action index to direction vector."""
@@ -84,6 +91,10 @@ class MyAgent(BaseAgent):
         
         Returns a value between 0 and 1.
         """
+        # Si action = 8 (stay), VMG = 0
+        if action == 8:
+            return 0.0
+        
         # Extraire position et vent de l'observation
         x, y = observation[0], observation[1]
         wx, wy = observation[4], observation[5]
@@ -158,7 +169,14 @@ class MyAgent(BaseAgent):
             else:
                 valid_actions.append(i)
                 
-        valid_actions.append(8) # Stay is always valid
+        # OPTIMIZATION: Only add stay action if really needed (close to goal)
+        x, y = observation[0], observation[1]
+        position = np.array([x, y])
+        dist_to_goal = np.linalg.norm(self.goal_position - position)
+        
+        # Only allow stay if very close to goal
+        if dist_to_goal < 2.0:
+            valid_actions.append(8)
 
         # --- Epsilon-greedy ---
         if self.np_random.random() < self.exploration_rate:
@@ -185,6 +203,9 @@ class MyAgent(BaseAgent):
 
         # Calculate VMG for reward shaping
         self.last_vmg = self._calculate_vmg(observation, action)
+        
+        # Track distance for distance reduction bonus
+        self.last_distance = dist_to_goal
 
         return action
 
@@ -201,22 +222,35 @@ class MyAgent(BaseAgent):
         # VMG bonus - strongly reward moving towards the goal
         vmg_bonus = self.last_vmg * 10.0
         
-        # Step penalty - discourage long trajectories
-        step_penalty = 0.3
+        # OPTIMIZATION 1: Increased step penalty to discourage long trajectories
+        step_penalty = 1.0  # Was 0.3
+        
+        # OPTIMIZATION 2: Penalize stay action heavily
+        stay_penalty = 3.0 if action == 8 else 0.0
+        
+        # OPTIMIZATION 3: Penalize direction changes to reduce zigzags
+        direction_change_penalty = 0.0
+        if self.last_action is not None and self.last_action != action and action != 8:
+            direction_change_penalty = 0.5
         
         # Combined shaped reward
-        shaped_reward = reward + efficiency_bonus + vmg_bonus - step_penalty
+        shaped_reward = (reward + efficiency_bonus + vmg_bonus 
+                        - step_penalty - stay_penalty - direction_change_penalty)
         
         # SARSA update: Q(s,a) ← Q(s,a) + α[R + γQ(s',a') - Q(s,a)]
         td_target = shaped_reward + self.discount_factor * self.q_table[next_state][next_action]
         td_error = td_target - self.q_table[state][action]
 
         self.q_table[state][action] += self.learning_rate * td_error
+        
+        # Update last action for next iteration
+        self.last_action = action
 
     def reset(self):
         self.last_state = None
         self.last_action = None
         self.last_vmg = 0.0
+        self.last_distance = None
         
         # Decay epsilon and learning rate (per episode)
         self.exploration_rate = max(self.min_exploration, 

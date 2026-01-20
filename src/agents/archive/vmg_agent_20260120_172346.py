@@ -84,6 +84,10 @@ class MyAgent(BaseAgent):
         
         Returns a value between 0 and 1.
         """
+        # Si action = 8 (stay), VMG = 0
+        if action == 8:
+            return 0.0
+        
         # Extraire position et vent de l'observation
         x, y = observation[0], observation[1]
         wx, wy = observation[4], observation[5]

@@ -656,18 +656,9 @@ class SailingEnv(gym.Env): # type: ignore
             return 100.0
             
         if prev_distance is not None:
-            # Reward shaping: reward progress towards goal
-            # Positive if getting closer, negative if moving away
-            # Multiplier 10 makes the signal stronger
             progress = (prev_distance - distance_to_goal)
-            
-            # Small step penalty to encourage speed
-            step_penalty = 0.05
-            
-            return progress * 10.0 - step_penalty
-            
-        # Fallback to sparse reward if no prev_distance provided
-        return -0.1
+            return progress * 10.0
+        return 0
     
     def _get_observation(self):
         """

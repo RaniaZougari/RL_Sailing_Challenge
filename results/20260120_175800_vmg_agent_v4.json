@@ -1,0 +1,84 @@
+{
+  "agent_source_backup": "/home/unmars/Downloads/RL_Sailing_Challenge/src/agents/archive/vmg_agent_v4_20260120_175634.py",
+  "hyperparameters": {
+    "learning_rate": 0.15,
+    "discount_factor": 0.99,
+    "exploration_rate": 0.09,
+    "position_bins": 10,
+    "velocity_bins": 5,
+    "wind_bins": 8,
+    "wind_preview_steps": 3,
+    "grid_size": 32,
+    "q_init_high": 5.0
+  },
+  "training": {
+    "scenarios": [
+      "simple_static",
+      "static_headwind",
+      "training_1",
+      "training_2",
+      "training_3"
+    ],
+    "episodes": 500,
+    "final_success_rate": 0.9876,
+    "avg_reward": 380.34376222372094,
+    "avg_steps": 112.4028,
+    "q_table_size": 6796,
+    "scenario_metrics": {
+      "simple_static": {
+        "success_rate": 96.6,
+        "avg_reward": 373.7483664749814,
+        "avg_steps": 155.88
+      },
+      "static_headwind": {
+        "success_rate": 97.2,
+        "avg_reward": 375.0718557083784,
+        "avg_steps": 142.276
+      },
+      "training_1": {
+        "success_rate": 100.0,
+        "avg_reward": 382.93959432356286,
+        "avg_steps": 106.31
+      },
+      "training_2": {
+        "success_rate": 100.0,
+        "avg_reward": 384.71779007640316,
+        "avg_steps": 69.834
+      },
+      "training_3": {
+        "success_rate": 100.0,
+        "avg_reward": 385.24120453526695,
+        "avg_steps": 87.714
+      }
+    }
+  },
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/vmg_agent_v4_multi_5scenarios_20260120_175634.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/vmg_agent_v4_exported_20260120_175754.py",
+  "evaluation": {
+    "simple_static": {
+      "output": "Loaded agent: MyAgentTrained\n\nEvaluating on 1 wind scenarios with 100 seeds\nAgent: MyAgentTrained\nMaximum steps per episode: 1000\n\nWIND_SCENARIO    | SUCCESS RATE | MEAN REWARD       | MEAN STEPS\n---------------------------------------------------------------------------\n\u274c Error evaluating on wind scenario simple_static: 'MyAgentTrained' object has no attribute '_get_valid_actions'\n---------------------------------------------------------------------------\n",
+      "success": true
+    },
+    "static_headwind": {
+      "output": "Loaded agent: MyAgentTrained\n\nEvaluating on 1 wind scenarios with 100 seeds\nAgent: MyAgentTrained\nMaximum steps per episode: 1000\n\nWIND_SCENARIO    | SUCCESS RATE | MEAN REWARD       | MEAN STEPS\n---------------------------------------------------------------------------\n\u274c Error evaluating on wind scenario static_headwind: 'MyAgentTrained' object has no attribute '_get_valid_actions'\n---------------------------------------------------------------------------\n",
+      "success": true
+    },
+    "training_1": {
+      "output": "Loaded agent: MyAgentTrained\n\nEvaluating on 1 wind scenarios with 100 seeds\nAgent: MyAgentTrained\nMaximum steps per episode: 1000\n\nWIND_SCENARIO    | SUCCESS RATE | MEAN REWARD       | MEAN STEPS\n---------------------------------------------------------------------------\n\u274c Error evaluating on wind scenario training_1: 'MyAgentTrained' object has no attribute '_get_valid_actions'\n---------------------------------------------------------------------------\n",
+      "success": true
+    },
+    "training_2": {
+      "output": "Loaded agent: MyAgentTrained\n\nEvaluating on 1 wind scenarios with 100 seeds\nAgent: MyAgentTrained\nMaximum steps per episode: 1000\n\nWIND_SCENARIO    | SUCCESS RATE | MEAN REWARD       | MEAN STEPS\n---------------------------------------------------------------------------\n\u274c Error evaluating on wind scenario training_2: 'MyAgentTrained' object has no attribute '_get_valid_actions'\n---------------------------------------------------------------------------\n",
+      "success": true
+    },
+    "training_3": {
+      "output": "Loaded agent: MyAgentTrained\n\nEvaluating on 1 wind scenarios with 100 seeds\nAgent: MyAgentTrained\nMaximum steps per episode: 1000\n\nWIND_SCENARIO    | SUCCESS RATE | MEAN REWARD       | MEAN STEPS\n---------------------------------------------------------------------------\n\u274c Error evaluating on wind scenario training_3: 'MyAgentTrained' object has no attribute '_get_valid_actions'\n---------------------------------------------------------------------------\n",
+      "success": true
+    }
+  },
+  "metadata": {
+    "agent": "vmg_agent_v4",
+    "timestamp": "20260120_175800",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent vmg_agent_v4 --scenario simple_static static_headwind training_1 training_2 training_3 --episodes 500"
+  }
+}

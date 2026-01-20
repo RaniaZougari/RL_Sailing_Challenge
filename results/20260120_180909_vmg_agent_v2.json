@@ -1,0 +1,134 @@
+{
+  "agent_source_backup": "/home/unmars/Downloads/RL_Sailing_Challenge/src/agents/archive/vmg_agent_v2_20260120_180645.py",
+  "hyperparameters": {
+    "learning_rate": 0.15,
+    "discount_factor": 0.99,
+    "exploration_rate": 0.15,
+    "position_bins": 10,
+    "velocity_bins": 5,
+    "wind_bins": 8,
+    "wind_preview_steps": 3,
+    "grid_size": 32,
+    "q_init_high": 5.0
+  },
+  "training": {
+    "scenarios": [
+      "simple_static",
+      "static_headwind",
+      "training_1",
+      "training_2",
+      "training_3"
+    ],
+    "episodes": 1000,
+    "final_success_rate": 0.9922,
+    "avg_reward": 381.8408483360052,
+    "avg_steps": 102.7642,
+    "q_table_size": 7506,
+    "scenario_metrics": {
+      "simple_static": {
+        "success_rate": 97.6,
+        "avg_reward": 377.4772884402169,
+        "avg_steps": 129.831
+      },
+      "static_headwind": {
+        "success_rate": 98.5,
+        "avg_reward": 377.33949627220085,
+        "avg_steps": 135.803
+      },
+      "training_1": {
+        "success_rate": 100.0,
+        "avg_reward": 383.6178451825228,
+        "avg_steps": 94.606
+      },
+      "training_2": {
+        "success_rate": 100.0,
+        "avg_reward": 385.58783039053765,
+        "avg_steps": 63.337
+      },
+      "training_3": {
+        "success_rate": 100.0,
+        "avg_reward": 385.1817813945461,
+        "avg_steps": 90.244
+      }
+    }
+  },
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/vmg_agent_v2_multi_5scenarios_20260120_180645.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/vmg_agent_v2_exported_20260120_180854.py",
+  "evaluation": {
+    "simple_static": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 232.82543462561236,
+      "mean_steps": 100.85,
+      "std_reward": 16.241162340680884,
+      "std_steps": 14.94749142833004,
+      "success_rate_std": 0,
+      "reward_std": 16.241162340680884,
+      "steps_std": 14.94749142833004,
+      "custom_score": 36.291872392293186,
+      "expected_score_100pct": 36.291872392293186,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "static_headwind": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 225.75552729131448,
+      "mean_steps": 96.48,
+      "std_reward": 20.53125839531361,
+      "std_steps": 16.588839621866263,
+      "success_rate_std": 0,
+      "reward_std": 20.53125839531361,
+      "steps_std": 16.588839621866263,
+      "custom_score": 37.92133122223712,
+      "expected_score_100pct": 37.92133122223712,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "training_1": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 255.58297890914528,
+      "mean_steps": 80.79,
+      "std_reward": 16.7692266757103,
+      "std_steps": 14.412699261415261,
+      "success_rate_std": 0,
+      "reward_std": 16.7692266757103,
+      "steps_std": 14.412699261415261,
+      "custom_score": 44.398405311419964,
+      "expected_score_100pct": 44.398405311419964,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "training_2": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 289.17042770964434,
+      "mean_steps": 50.44,
+      "std_reward": 19.074263512910345,
+      "std_steps": 14.961497251278027,
+      "success_rate_std": 0,
+      "reward_std": 19.074263512910345,
+      "steps_std": 14.961497251278027,
+      "custom_score": 60.23365477584374,
+      "expected_score_100pct": 60.23365477584374,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "training_3": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 242.8027188941916,
+      "mean_steps": 80.43,
+      "std_reward": 22.37461807882465,
+      "std_steps": 18.02734312093715,
+      "success_rate_std": 0,
+      "reward_std": 22.37461807882465,
+      "steps_std": 18.02734312093715,
+      "custom_score": 44.55933506602289,
+      "expected_score_100pct": 44.55933506602289,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    }
+  },
+  "metadata": {
+    "agent": "vmg_agent_v2",
+    "timestamp": "20260120_180909",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent vmg_agent_v2 --scenario simple_static static_headwind training_1 training_2 training_3 --episodes 1000"
+  }
+}
