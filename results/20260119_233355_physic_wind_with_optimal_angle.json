@@ -1,0 +1,52 @@
+{
+  "hyperparameters": {
+    "learning_rate": 0.15,
+    "discount_factor": 0.99,
+    "exploration_rate": 0.05,
+    "position_bins": 10,
+    "velocity_bins": 5,
+    "wind_bins": 8,
+    "wind_preview_steps": 3,
+    "grid_size": 32,
+    "q_init_high": 10.0
+  },
+  "training": {
+    "scenarios": [
+      "simple_static"
+    ],
+    "episodes": 200,
+    "final_success_rate": 0.005,
+    "avg_reward": 83.75818429061401,
+    "avg_steps": 499.805,
+    "q_table_size": 2918,
+    "scenario_metrics": {
+      "simple_static": {
+        "success_rate": 0.5,
+        "avg_reward": 83.758184290614,
+        "avg_steps": 499.805
+      }
+    }
+  },
+  "model_path": "/Users/raniazougarirania_2004/ENSIMAG_3A/MFML/RL_Sailing_Challenge/src/models/physic_wind_with_optimal_angle_simple_static_20260119_233320.pkl",
+  "exported_path": "/Users/raniazougarirania_2004/ENSIMAG_3A/MFML/RL_Sailing_Challenge/src/Submission_agents/physic_wind_with_optimal_angle_exported_20260119_233341.py",
+  "evaluation": {
+    "simple_static": {
+      "success": true,
+      "success_rate": 0.28,
+      "mean_reward": 85.18223148501964,
+      "mean_steps": 981.36,
+      "std_reward": 43.726601801201085,
+      "std_steps": 96.80253302470965,
+      "success_rate_std": 0,
+      "reward_std": 43.726601801201085,
+      "steps_std": 96.80253302470965,
+      "custom_score": -69.2841776851498,
+      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+    }
+  },
+  "metadata": {
+    "agent": "physic_wind_with_optimal_angle",
+    "timestamp": "20260119_233355",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent physic_wind_with_optimal_angle --scenario simple_static --episodes 200"
+  }
+}

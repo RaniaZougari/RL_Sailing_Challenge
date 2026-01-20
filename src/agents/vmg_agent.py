@@ -14,19 +14,19 @@ class MyAgent(BaseAgent):
         self.np_random = np.random.default_rng()
 
         # Learning parameters with decay
-        self.learning_rate = 0.2         # alpha - start high
+        self.learning_rate = 0.15         # alpha - start high
         self.min_learning_rate = 0.05    # minimum alpha
         self.lr_decay_rate = 0.999       # decay per episode
         
         self.discount_factor = 0.99  # gamma
         
         # Epsilon with decay (per episode, not per step)
-        self.exploration_rate = 0.3      # Start high for exploration
+        self.exploration_rate = 0.05      # Start high for exploration
         self.min_exploration = 0.01      # Minimum epsilon
         self.eps_decay_rate = 0.995      # Decay per episode (slower)
 
         # Discretization parameters
-        self.position_bins = 8
+        self.position_bins = 10
         self.velocity_bins = 5
         self.wind_bins = 8
         self.wind_preview_steps = 3
@@ -37,7 +37,7 @@ class MyAgent(BaseAgent):
         
         # Q-table
         self.q_table = {}
-        self.q_init_high = 10.0
+        self.q_init_high = 1.0
         
         # State for learning
         self.last_efficiency = 0.0
