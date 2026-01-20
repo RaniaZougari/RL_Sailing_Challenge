@@ -1,0 +1,71 @@
+{
+  "hyperparameters": {
+    "learning_rate": 0.2,
+    "discount_factor": 0.99,
+    "exploration_rate": 0.3,
+    "position_bins": 10,
+    "velocity_bins": 5,
+    "wind_bins": 8,
+    "wind_preview_steps": 3,
+    "grid_size": 32,
+    "q_init_high": 10.0
+  },
+  "training": {
+    "scenarios": [
+      "training_2",
+      "training_3"
+    ],
+    "episodes": 1000,
+    "final_success_rate": 0.999,
+    "avg_reward": 383.41965701950556,
+    "avg_steps": 103.1835,
+    "q_table_size": 2607,
+    "scenario_metrics": {
+      "training_2": {
+        "success_rate": 99.8,
+        "avg_reward": 382.73961578778545,
+        "avg_steps": 98.646
+      },
+      "training_3": {
+        "success_rate": 100.0,
+        "avg_reward": 384.09969825122727,
+        "avg_steps": 107.721
+      }
+    }
+  },
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/vmg_agent_multi_2scenarios_20260120_024731.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/vmg_agent_exported_20260120_024821.py",
+  "evaluation": {
+    "training_2": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 296.74226520198766,
+      "mean_steps": 51.1,
+      "std_reward": 17.98133288920558,
+      "std_steps": 19.81035082980612,
+      "success_rate_std": 0,
+      "reward_std": 17.98133288920558,
+      "steps_std": 19.81035082980612,
+      "custom_score": 97.85742265201988,
+      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+    },
+    "training_3": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 195.09415858844895,
+      "mean_steps": 109.97,
+      "std_reward": 22.429937363517393,
+      "std_steps": 21.004501898402637,
+      "success_rate_std": 0,
+      "reward_std": 22.429937363517393,
+      "steps_std": 21.004501898402637,
+      "custom_score": 90.9539415858845,
+      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+    }
+  },
+  "metadata": {
+    "agent": "vmg_agent",
+    "timestamp": "20260120_024827",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent vmg_agent --scenario training_2 training_3 --episodes 1000"
+  }
+}

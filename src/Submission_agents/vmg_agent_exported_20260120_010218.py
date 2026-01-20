@@ -7,10 +7,40 @@ Auto-generated from: /home/unmars/Downloads/RL_Sailing_Challenge/src/agents/vmg_
 """
 
 import numpy as np
-from agents.base_agent import BaseAgent
-from src.sailing_physics import calculate_sailing_efficiency
+from evaluator.base_agent import BaseAgent
 
-class MyAgentTrained(BaseAgent):
+def calculate_sailing_efficiency(boat_direction, wind_direction):
+    """
+    Calculate sailing efficiency based on the angle between boat direction and wind.
+    
+    Args:
+        boat_direction: Normalized vector of boat's desired direction
+        wind_direction: Normalized vector of wind direction (where wind is going TO)
+        
+    Returns:
+        sailing_efficiency: Float between 0.05 and 1.0 representing how efficiently the boat can sail
+    """
+    # Invert wind direction to get where wind is coming FROM
+    wind_from = -wind_direction
+    
+    # Calculate angle between wind and direction
+    wind_angle = np.arccos(np.clip(
+        np.dot(wind_from, boat_direction), -1.0, 1.0))
+    
+    # Calculate sailing efficiency based on angle to wind
+    if wind_angle < np.pi/4:  # Less than 45 degrees to wind
+        sailing_efficiency = 0.05  # Small but non-zero efficiency in no-go zone
+    elif wind_angle < np.pi/2:  # Between 45 and 90 degrees
+        sailing_efficiency = 0.5 + 0.5 * (wind_angle - np.pi/4) / (np.pi/4)  # Linear increase to 1.0
+    elif wind_angle < 3*np.pi/4:  # Between 90 and 135 degrees
+        sailing_efficiency = 1.0  # Maximum efficiency
+    else:  # More than 135 degrees
+        sailing_efficiency = 1.0 - 0.5 * (wind_angle - 3*np.pi/4) / (np.pi/4)  # Linear decrease
+        sailing_efficiency = max(0.5, sailing_efficiency)  # But still decent
+    
+    return sailing_efficiency 
+
+class MyAgent(BaseAgent):
     """
     A Q-learning agent trained on the sailing environment.
     Uses a discretized state space and a lookup table for actions.

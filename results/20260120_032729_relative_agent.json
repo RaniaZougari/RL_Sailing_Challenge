@@ -1,0 +1,58 @@
+{
+  "hyperparameters": {
+    "learning_rate": 0.2,
+    "discount_factor": 0.99,
+    "exploration_rate": 0.3,
+    "q_init_high": 10.0
+  },
+  "training": {
+    "scenarios": [
+      "training_1",
+      "training_2",
+      "training_3"
+    ],
+    "episodes": 1000,
+    "final_success_rate": 1.0,
+    "avg_reward": 383.38793110657434,
+    "avg_steps": 112.919,
+    "q_table_size": 148,
+    "scenario_metrics": {
+      "training_1": {
+        "success_rate": 100.0,
+        "avg_reward": 381.43822034277684,
+        "avg_steps": 154.803
+      },
+      "training_2": {
+        "success_rate": 100.0,
+        "avg_reward": 384.556771307466,
+        "avg_steps": 77.774
+      },
+      "training_3": {
+        "success_rate": 100.0,
+        "avg_reward": 384.16880166947516,
+        "avg_steps": 106.18
+      }
+    }
+  },
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/relative_agent_multi_3scenarios_20260120_032549.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/relative_agent_exported_20260120_032726.py",
+  "evaluation": {
+    "training_1": {
+      "output": "Loaded agent: MyAgentTrained\n\nEvaluating on 1 wind scenarios with 100 seeds\nAgent: MyAgentTrained\nMaximum steps per episode: 1000\n\nWIND_SCENARIO    | SUCCESS RATE | MEAN REWARD       | MEAN STEPS\n---------------------------------------------------------------------------\n\u274c Error evaluating on wind scenario training_1: 'MyAgentTrained' object has no attribute '_calculate_vmg_reward'\n---------------------------------------------------------------------------\n",
+      "success": true
+    },
+    "training_2": {
+      "output": "Loaded agent: MyAgentTrained\n\nEvaluating on 1 wind scenarios with 100 seeds\nAgent: MyAgentTrained\nMaximum steps per episode: 1000\n\nWIND_SCENARIO    | SUCCESS RATE | MEAN REWARD       | MEAN STEPS\n---------------------------------------------------------------------------\n\u274c Error evaluating on wind scenario training_2: 'MyAgentTrained' object has no attribute '_calculate_vmg_reward'\n---------------------------------------------------------------------------\n",
+      "success": true
+    },
+    "training_3": {
+      "output": "Loaded agent: MyAgentTrained\n\nEvaluating on 1 wind scenarios with 100 seeds\nAgent: MyAgentTrained\nMaximum steps per episode: 1000\n\nWIND_SCENARIO    | SUCCESS RATE | MEAN REWARD       | MEAN STEPS\n---------------------------------------------------------------------------\n\u274c Error evaluating on wind scenario training_3: 'MyAgentTrained' object has no attribute '_calculate_vmg_reward'\n---------------------------------------------------------------------------\n",
+      "success": true
+    }
+  },
+  "metadata": {
+    "agent": "relative_agent",
+    "timestamp": "20260120_032729",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent relative_agent --scenario training_1 training_2 training_3 --episodes 1000"
+  }
+}

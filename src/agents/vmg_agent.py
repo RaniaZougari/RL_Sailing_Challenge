@@ -13,14 +13,20 @@ class MyAgent(BaseAgent):
         super().__init__()
         self.np_random = np.random.default_rng()
 
-        # Learning parameters
-        self.learning_rate = 0.15   # alpha
+        # Learning parameters with decay
+        self.learning_rate = 0.2         # alpha - start high
+        self.min_learning_rate = 0.05    # minimum alpha
+        self.lr_decay_rate = 0.999       # decay per episode
+        
         self.discount_factor = 0.99  # gamma
-        # Epsilon
-        self.exploration_rate = 0.05
+        
+        # Epsilon with decay (per episode, not per step)
+        self.exploration_rate = 0.3      # Start high for exploration
+        self.min_exploration = 0.01      # Minimum epsilon
+        self.eps_decay_rate = 0.995      # Decay per episode (slower)
 
         # Discretization parameters
-        self.position_bins = 10
+        self.position_bins = 8
         self.velocity_bins = 5
         self.wind_bins = 8
         self.wind_preview_steps = 3
@@ -35,7 +41,7 @@ class MyAgent(BaseAgent):
         
         # State for learning
         self.last_efficiency = 0.0
-        self.last_vmg = 0.0  # NEW: Store last VMG for reward shaping
+        self.last_vmg = 0.0
 
     def _action_to_direction(self, action):
         """Convert action index to direction vector."""
@@ -68,35 +74,58 @@ class MyAgent(BaseAgent):
 
         return (x_bin, y_bin, v_bin, wind_bin)
 
-    def _calculate_vmg(self, observation):
+    def _calculate_vmg(self, observation, action):
         """
-        Calculate VMG (Velocity Made Good) - projected velocity towards goal.
+        VMG intelligent pondéré par l'efficacité de navigation.
         
-        VMG = dot(velocity, direction_to_goal)
+        Combine:
+        - La direction vers le goal (cos_to_goal)
+        - L'efficacité de navigation avec le vent local (polar diagram)
         
-        Returns a value that is positive when moving towards goal,
-        negative when moving away.
+        Returns a value between 0 and 1.
         """
+        # Si action = 8 (stay), VMG = 0
+        if action == 8:
+            return 0.0
+        
+        # Extraire position et vent de l'observation
         x, y = observation[0], observation[1]
-        vx, vy = observation[2], observation[3]
+        wx, wy = observation[4], observation[5]
         
         position = np.array([x, y])
-        velocity = np.array([vx, vy])
+        wind_vec = np.array([wx, wy])
+        wind_mag = np.linalg.norm(wind_vec)
         
-        # Direction to goal
+        # Direction vers le goal
         direction_to_goal = self.goal_position - position
-        distance = np.linalg.norm(direction_to_goal)
+        dist_to_goal = np.linalg.norm(direction_to_goal)
         
-        if distance < 0.1:  # Already at goal
-            return 0.0
+        if dist_to_goal < 0.1:  # Déjà au goal
+            return 1.0
             
-        # Normalize direction
-        direction_to_goal = direction_to_goal / distance
+        direction_to_goal = direction_to_goal / dist_to_goal
         
-        # VMG = projection of velocity onto direction to goal
-        vmg = np.dot(velocity, direction_to_goal)
+        # Direction du bateau (action choisie)
+        action_vec = self._action_to_direction(action)
+        action_norm = np.linalg.norm(action_vec)
+        if action_norm > 0:
+            action_vec = action_vec / action_norm
         
-        return vmg
+        # Efficacité de cette direction avec le vent local
+        if wind_mag > 0:
+            wind_normalized = wind_vec / wind_mag
+            efficiency = calculate_sailing_efficiency(action_vec, wind_normalized)
+        else:
+            efficiency = 1.0  # Pas de vent = efficacité max
+        
+        # Composante vers le goal (entre -1 et 1)
+        cos_to_goal = np.dot(action_vec, direction_to_goal)
+        
+        # VMG "intelligent" = efficacité × max(0, cos_to_goal)
+        # On garde seulement les directions qui vont vers le goal
+        smart_vmg = efficiency * max(0, cos_to_goal)
+        
+        return smart_vmg
 
     def act(self, observation, info=None):
         """
@@ -159,28 +188,31 @@ class MyAgent(BaseAgent):
             self.last_efficiency = 0.0
 
         # Calculate VMG for reward shaping
-        self.last_vmg = self._calculate_vmg(observation)
+        self.last_vmg = self._calculate_vmg(observation, action)
 
         return action
 
-    def learn(self, state, action, reward, next_state):
+    def learn(self, state, action, reward, next_state, next_action=None):
+        """SARSA learning: uses next_action for Q(s',a') instead of max(Q(s'))"""
         if state not in self.q_table:
             self.q_table[state] = self.np_random.random(9) * self.q_init_high
         if next_state not in self.q_table:
             self.q_table[next_state] = self.np_random.random(9) * self.q_init_high
 
-        # Efficiency bonus (polar diagram)
-        efficiency_bonus = self.last_efficiency * 0.5
+        # Efficiency bonus (polar diagram) - reduced to let VMG dominate
+        efficiency_bonus = self.last_efficiency * 0.3
         
-        # NEW: VMG bonus - reward moving fast towards the goal
-        # Scaled by 2.0 as suggested, but can be tuned
-        vmg_bonus = self.last_vmg * 2.0
+        # VMG bonus - strongly reward moving towards the goal
+        vmg_bonus = self.last_vmg * 10.0
+        
+        # Step penalty - discourage long trajectories
+        step_penalty = 0.3
         
         # Combined shaped reward
-        shaped_reward = reward + efficiency_bonus + vmg_bonus
+        shaped_reward = reward + efficiency_bonus + vmg_bonus - step_penalty
         
-        # Q-learning update (Bellman equation)
-        td_target = shaped_reward + self.discount_factor * np.nanmax(self.q_table[next_state])
+        # SARSA update: Q(s,a) ← Q(s,a) + α[R + γQ(s',a') - Q(s,a)]
+        td_target = shaped_reward + self.discount_factor * self.q_table[next_state][next_action]
         td_error = td_target - self.q_table[state][action]
 
         self.q_table[state][action] += self.learning_rate * td_error
@@ -189,6 +221,12 @@ class MyAgent(BaseAgent):
         self.last_state = None
         self.last_action = None
         self.last_vmg = 0.0
+        
+        # Decay epsilon and learning rate (per episode)
+        self.exploration_rate = max(self.min_exploration, 
+                                    self.exploration_rate * self.eps_decay_rate)
+        self.learning_rate = max(self.min_learning_rate,
+                                 self.learning_rate * self.lr_decay_rate)
 
     def seed(self, seed=None):
         self.np_random = np.random.default_rng(seed)

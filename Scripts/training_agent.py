@@ -63,19 +63,25 @@ def train_agent(
         for episode in range(num_episodes):
             observation, info = env.reset(seed=scenario_idx * num_episodes + episode)
             state = agent.discretize_state(observation)
+            
+            # SARSA: get first action
+            action = agent.act(observation)
 
             total_reward = 0
 
             for step in range(max_steps):
-                action = agent.act(observation)
-
                 next_observation, reward, done, truncated, info = env.step(action)
                 next_state = agent.discretize_state(next_observation)
-
-                agent.learn(state, action, reward, next_state)
+                
+                # SARSA: get next action BEFORE learning
+                next_action = agent.act(next_observation)
+                
+                # SARSA: pass next_action to learn
+                agent.learn(state, action, reward, next_state, next_action)
 
                 state = next_state
                 observation = next_observation
+                action = next_action  # SARSA: use next_action for next iteration
                 total_reward += reward
 
                 if done or truncated:

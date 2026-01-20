@@ -303,16 +303,19 @@ def main():
             print(f"Reward: {np.mean(rewards):.2f} ± {reward_std_of_means:.2f}", flush=True)
             print(f"Steps: {np.mean(steps):.1f} ± {steps_std_of_means:.1f}", flush=True)
             
-            # Custom Score Calculation
-            # Formula: score = (success_rate * 100) - (avg_steps / 10) + (avg_reward / 100)
-            avg_success_percent = np.mean(success_rates) * 100
+            # Custom Score Calculation - Professor's formula
+            # Formula: score = 100 * 0.99^steps (for successful episodes)
             avg_steps = np.mean(steps)
-            avg_reward = np.mean(rewards)
+            avg_success = np.mean(success_rates)
             
-            custom_score = avg_success_percent - (avg_steps / 10.0) + (avg_reward / 100.0)
+            # Expected score assuming 100% success
+            expected_score = 100 * (0.99 ** avg_steps)
+            # Actual score accounting for success rate
+            custom_score = expected_score * avg_success
             
-            print(f"\n🏆 CUSTOM SCORE: {custom_score:.2f}", flush=True)
-            print(f"   (Formula: Success% - Steps/10 + Reward/100)", flush=True)
+            print(f"\\n🏆 EXPECTED LEADERBOARD SCORE: {custom_score:.2f}", flush=True)
+            print(f"   (Formula: 100 × 0.99^steps × success_rate)", flush=True)
+            print(f"   With {avg_steps:.1f} avg steps: 100 × 0.99^{avg_steps:.1f} = {expected_score:.2f}", flush=True)
             
             # Prepare structured results
             structured_results = {
@@ -324,7 +327,8 @@ def main():
                     'reward_std': reward_std_of_means,
                     'steps_std': steps_std_of_means,
                     'custom_score': custom_score,
-                    'custom_score_formula': 'Success% - Steps/10 + Reward/100'
+                    'expected_score_100pct': expected_score,
+                    'custom_score_formula': '100 × 0.99^steps × success_rate'
                 },
                 'scenarios': {
                     name: {
