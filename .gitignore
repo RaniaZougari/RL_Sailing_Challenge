@@ -3,3 +3,4 @@ training_viz/
 *.pkl
 __pycache__/
 src/agents/.DS_Store
+*.ipynb
