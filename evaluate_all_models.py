@@ -27,7 +27,7 @@ def calculate_custom_score(mean_steps, success_rate):
 
 
 def main():
-    json_files = glob.glob(os.path.join(RESULTS_DIR, '*points.json'))
+    json_files = glob.glob(os.path.join(RESULTS_DIR, '*.json'))
     print(f"Found {len(json_files)} result files. Scanning for missing evaluations...")
 
     for filepath in sorted(json_files):

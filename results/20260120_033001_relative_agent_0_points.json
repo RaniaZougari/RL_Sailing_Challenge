@@ -34,8 +34,8 @@
       }
     }
   },
-  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/relative_agent_multi_3scenarios_20260120_032810.pkl",
-  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/relative_agent_exported_20260120_032950.py",
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/relative_agent_multi_3scenarios_20260120_032810_0_points.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/relative_agent_exported_20260120_032950_0_points.py",
   "evaluation": {
     "training_1": {
       "success": true,
@@ -81,6 +81,26 @@
       "expected_score_100pct": 39.09782363123514,
       "custom_score_formula": "100 * 0.99^steps * success_rate",
       "previous_custom_score": 39.09782363123514
+    },
+    "simple_static": {
+      "success_rate": 0.1,
+      "mean_reward": 60.56911415429438,
+      "mean_steps": 1000.0,
+      "std_reward": 28.436154403194816,
+      "std_steps": 0.0,
+      "success": true,
+      "custom_score": 0.00043171247410657865,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
+    },
+    "static_headwind": {
+      "success_rate": 0.53,
+      "mean_reward": 82.88212898148622,
+      "mean_steps": 761.12,
+      "std_reward": 38.93623337482479,
+      "std_steps": 345.2513368547615,
+      "success": true,
+      "custom_score": 0.025242663718864897,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
     }
   },
   "metadata": {

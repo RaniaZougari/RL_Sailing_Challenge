@@ -103,6 +103,16 @@
       "custom_score": 33.6128943107275,
       "custom_score_formula": "100 * 0.99^steps * success_rate",
       "previous_custom_score": 91.17688110948467
+    },
+    "static_headwind": {
+      "success_rate": 0.43,
+      "mean_reward": 44.73351298764685,
+      "mean_steps": 908.46,
+      "std_reward": 34.591515517581946,
+      "std_steps": 203.11407730632556,
+      "success": true,
+      "custom_score": 0.004658191511745332,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
     }
   },
   "metadata": {

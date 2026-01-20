@@ -33,6 +33,46 @@
     "simple_static": {
       "output": "",
       "success": false
+    },
+    "static_headwind": {
+      "success_rate": 0.23,
+      "mean_reward": -5.97713164480322,
+      "mean_steps": 1000.0,
+      "std_reward": 8.785399160993457,
+      "std_steps": 0.0,
+      "success": true,
+      "custom_score": 0.0009929386904451308,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
+    },
+    "training_1": {
+      "success_rate": 0.75,
+      "mean_reward": 69.08349655630539,
+      "mean_steps": 725.35,
+      "std_reward": 31.40872010669988,
+      "std_steps": 298.5161762786064,
+      "success": true,
+      "custom_score": 0.0511740353416027,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
+    },
+    "training_2": {
+      "success_rate": 0.82,
+      "mean_reward": 96.58370276039801,
+      "mean_steps": 594.8,
+      "std_reward": 49.77733103612376,
+      "std_steps": 301.9514530516454,
+      "success": true,
+      "custom_score": 0.20779141428005923,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
+    },
+    "training_3": {
+      "success_rate": 0.65,
+      "mean_reward": 41.208569029393914,
+      "mean_steps": 711.44,
+      "std_reward": 25.52174441338172,
+      "std_steps": 326.38502784288374,
+      "success": true,
+      "custom_score": 0.051005405089858485,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
     }
   },
   "metadata": {
