@@ -58,8 +58,9 @@
       "success_rate_std": 0,
       "reward_std": 32.973311368993556,
       "steps_std": 342.0160480152942,
-      "custom_score": 19.6564827883599,
-      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+      "custom_score": 0.27481410273625734,
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 19.6564827883599
     },
     "static_headwind": {
       "success": true,
@@ -71,8 +72,9 @@
       "success_rate_std": 0,
       "reward_std": 49.9199919924414,
       "steps_std": 251.7388478165418,
-      "custom_score": 68.8778012534303,
-      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+      "custom_score": 6.47140254236992,
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 68.8778012534303
     },
     "training_1": {
       "success": true,
@@ -84,8 +86,9 @@
       "success_rate_std": 0,
       "reward_std": 27.79691850300549,
       "steps_std": 42.165502487222895,
-      "custom_score": 84.54720036733825,
-      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+      "custom_score": 17.66681918528632,
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 84.54720036733825
     },
     "training_2": {
       "success": true,
@@ -97,8 +100,9 @@
       "success_rate_std": 0,
       "reward_std": 34.24982280194557,
       "steps_std": 39.92417813806566,
-      "custom_score": 88.01282027832251,
-      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+      "custom_score": 24.33931550618364,
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 88.01282027832251
     }
   },
   "metadata": {

@@ -46,8 +46,9 @@
       "success_rate_std": 0,
       "reward_std": 17.98133288920558,
       "steps_std": 19.81035082980612,
-      "custom_score": 97.85742265201988,
-      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+      "custom_score": 59.8354337962687,
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 97.85742265201988
     },
     "training_3": {
       "success": true,
@@ -59,8 +60,9 @@
       "success_rate_std": 0,
       "reward_std": 22.429937363517393,
       "steps_std": 21.004501898402637,
-      "custom_score": 90.9539415858845,
-      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+      "custom_score": 33.113291318084556,
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 90.9539415858845
     }
   },
   "metadata": {

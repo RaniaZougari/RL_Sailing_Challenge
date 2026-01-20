@@ -11,8 +11,9 @@
       "success_rate_std": 0,
       "reward_std": 31.438893752365942,
       "steps_std": 292.2542838009394,
-      "custom_score": 50.68824586828283,
-      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+      "custom_score": 1.6372612032457574,
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 50.68824586828283
     }
   },
   "metadata": {

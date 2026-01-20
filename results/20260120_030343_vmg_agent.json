@@ -54,7 +54,8 @@
       "steps_std": 31.9716296112663,
       "custom_score": 20.551744185993208,
       "expected_score_100pct": 20.551744185993208,
-      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 20.551744185993208
     },
     "training_2": {
       "success": true,
@@ -68,7 +69,8 @@
       "steps_std": 56.78978429259968,
       "custom_score": 46.1129268021497,
       "expected_score_100pct": 46.1129268021497,
-      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 46.1129268021497
     },
     "training_3": {
       "success": true,
@@ -82,7 +84,8 @@
       "steps_std": 19.980630620678618,
       "custom_score": 36.280931676555234,
       "expected_score_100pct": 36.280931676555234,
-      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 36.280931676555234
     }
   },
   "metadata": {

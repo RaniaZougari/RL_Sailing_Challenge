@@ -64,8 +64,9 @@
       "success_rate_std": 0,
       "reward_std": 10.881346819182733,
       "steps_std": 0.0,
-      "custom_score": 3.2709558141120487,
-      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+      "custom_score": 0.004317124741065786,
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 3.2709558141120487
     },
     "static_headwind": {
       "success": true,
@@ -77,8 +78,9 @@
       "success_rate_std": 0,
       "reward_std": 5.727388299887448,
       "steps_std": 0.0,
-      "custom_score": 3.2034395182944615,
-      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+      "custom_score": 0.004317124741065786,
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 3.2034395182944615
     },
     "training_1": {
       "success": true,
@@ -90,8 +92,9 @@
       "success_rate_std": 0,
       "reward_std": 29.631885993988657,
       "steps_std": 195.7230847396392,
-      "custom_score": 12.11484287726413,
-      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+      "custom_score": 0.01016528749532557,
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 12.11484287726413
     },
     "training_2": {
       "success": true,
@@ -103,8 +106,9 @@
       "success_rate_std": 0,
       "reward_std": 69.07161955467508,
       "steps_std": 177.07249221717075,
-      "custom_score": 12.11384239689002,
-      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+      "custom_score": 0.00989713019847222,
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 12.11384239689002
     },
     "training_3": {
       "success": true,
@@ -116,8 +120,9 @@
       "success_rate_std": 0,
       "reward_std": 56.521640192505096,
       "steps_std": 240.76687708237614,
-      "custom_score": 16.43622355127779,
-      "custom_score_formula": "Success% - Steps/10 + Reward/100"
+      "custom_score": 0.01516792655246566,
+      "custom_score_formula": "100 * 0.99^steps * success_rate",
+      "previous_custom_score": 16.43622355127779
     }
   },
   "metadata": {
