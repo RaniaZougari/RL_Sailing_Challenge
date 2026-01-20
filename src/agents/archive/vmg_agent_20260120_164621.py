@@ -41,16 +41,26 @@ class MyAgent(BaseAgent):
         
         # State for learning
         self.last_efficiency = 0.0
-        self.last_vmg = 0.0
+        self.last_observation = None
+        
+        # OPTIMIZATION: Pre-compute and cache action vectors
+        self._action_vectors = np.array([
+            [0, 1], [1, 1], [1, 0], [1, -1],
+            [0, -1], [-1, -1], [-1, 0], [-1, 1],
+            [0, 0]
+        ], dtype=np.float32)
+        # Normalize (except stay)
+        for i in range(8):
+            norm = np.linalg.norm(self._action_vectors[i])
+            if norm > 0:
+                self._action_vectors[i] /= norm
+        
+        # OPTIMIZATION: Cache for action filtering by wind_bin
+        self._action_filter_cache = {}
 
     def _action_to_direction(self, action):
-        """Convert action index to direction vector."""
-        directions = [
-            (0, 1), (1, 1), (1, 0), (1, -1),
-            (0, -1), (-1, -1), (-1, 0), (-1, 1),
-            (0, 0)
-        ]
-        return np.array(directions[action])
+        """Convert action index to direction vector (uses cached vectors)."""
+        return self._action_vectors[action].copy()
 
     def discretize_state(self, observation):
         """Discretize the continuous observation into a tuple state."""
@@ -137,32 +147,32 @@ class MyAgent(BaseAgent):
             # Initialize with random values instead of constant
             self.q_table[state] = self.np_random.random(9) * self.q_init_high
 
-        # --- Physics-based action filtering ---
+        # --- Physics-based action filtering (OPTIMIZED with cache) ---
         wx, wy = observation[4], observation[5]
-        wind_mag = np.sqrt(wx**2 + wy**2)
         
-        valid_actions = []
-        action_vectors = [
-            (0, 1), (1, 1), (1, 0), (1, -1),
-            (0, -1), (-1, -1), (-1, 0), (-1, 1)
-        ] # Actions 0-7
+        # Use wind_bin as cache key
+        wind_angle = np.arctan2(wy, wx)
+        wind_bin = int(((wind_angle + np.pi) / (2 * np.pi)) * self.wind_bins) % self.wind_bins
         
-        # Threshold for no-go zone (approx 45 degrees)
-        no_go_threshold = -0.707
-
-        for i in range(8):
-            ax, ay = action_vectors[i]
-            a_mag = np.sqrt(ax**2 + ay**2)
+        if wind_bin in self._action_filter_cache:
+            valid_actions = self._action_filter_cache[wind_bin]
+        else:
+            # Calculate once per wind_bin
+            wind_mag = np.sqrt(wx**2 + wy**2)
+            valid_actions = []
+            no_go_threshold = -0.707
             
             if wind_mag > 0:
-                cos_theta = (ax * wx + ay * wy) / (a_mag * wind_mag)
-                
-                if cos_theta >= no_go_threshold:
-                    valid_actions.append(i)
+                for i in range(8):
+                    ax, ay = self._action_vectors[i]
+                    cos_theta = (ax * wx + ay * wy) / wind_mag  # action already normalized
+                    if cos_theta >= no_go_threshold:
+                        valid_actions.append(i)
             else:
-                valid_actions.append(i)
-                
-        valid_actions.append(8) # Stay is always valid
+                valid_actions = list(range(8))
+            
+            valid_actions.append(8)  # Stay is always valid
+            self._action_filter_cache[wind_bin] = valid_actions
 
         # --- Epsilon-greedy ---
         if self.np_random.random() < self.exploration_rate:
@@ -175,20 +185,22 @@ class MyAgent(BaseAgent):
             action = np.nanargmax(masked_q_values)
 
         # Calculate efficiency of the chosen action
+        wx, wy = observation[4], observation[5]
+        wind_mag = np.sqrt(wx**2 + wy**2)
+        
         if action < 8:
-            action_vec = self._action_to_direction(action)
-            action_vec = action_vec / np.linalg.norm(action_vec)
+            action_vec = self._action_vectors[action]  # Already normalized
             
-            wind_vec = np.array([wx, wy])
             if wind_mag > 0:
-                wind_vec = wind_vec / wind_mag
-                
-            self.last_efficiency = calculate_sailing_efficiency(action_vec, wind_vec)
+                wind_vec = np.array([wx, wy]) / wind_mag
+                self.last_efficiency = calculate_sailing_efficiency(action_vec, wind_vec)
+            else:
+                self.last_efficiency = 1.0
         else:
             self.last_efficiency = 0.0
 
-        # Calculate VMG for reward shaping
-        self.last_vmg = self._calculate_vmg(observation, action)
+        # OPTIMIZATION: Store observation for lazy VMG calculation in learn()
+        self.last_observation = observation
 
         return action
 
@@ -202,8 +214,9 @@ class MyAgent(BaseAgent):
         # Efficiency bonus (polar diagram) - reduced to let VMG dominate
         efficiency_bonus = self.last_efficiency * 0.3
         
-        # VMG bonus - strongly reward moving towards the goal
-        vmg_bonus = self.last_vmg * 10.0
+        # OPTIMIZATION: Lazy VMG calculation (only when needed for learning)
+        vmg = self._calculate_vmg(self.last_observation, action) if self.last_observation is not None else 0.0
+        vmg_bonus = vmg * 10.0
         
         # Step penalty - discourage long trajectories
         step_penalty = 0.3
@@ -220,7 +233,7 @@ class MyAgent(BaseAgent):
     def reset(self):
         self.last_state = None
         self.last_action = None
-        self.last_vmg = 0.0
+        self.last_observation = None
         
         # Decay epsilon and learning rate (per episode)
         self.exploration_rate = max(self.min_exploration, 

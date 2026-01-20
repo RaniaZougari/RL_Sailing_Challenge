@@ -37,7 +37,7 @@ class MyAgent(BaseAgent):
         
         # Q-table
         self.q_table = {}
-        self.q_init_high = 10.0
+        self.q_init_high = 1.0
         
         # State for learning
         self.last_efficiency = 0.0
