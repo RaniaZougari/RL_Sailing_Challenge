@@ -82,6 +82,25 @@ def train_stage(args, results):
     print(f"Scenarios: {', '.join(scenarios)}")
     print(f"Model will be saved to: {model_path}")
     
+    # Save a copy of the agent source file for archival
+    try:
+        agent_source_path = project_root / 'src' / 'agents' / f'{args.agent}.py'
+        if agent_source_path.exists():
+            # Create archive directory
+            archive_dir = project_root / 'src' / 'agents' / 'archive'
+            archive_dir.mkdir(exist_ok=True, parents=True)
+            
+            # Copy with timestamp
+            import shutil
+            archive_path = archive_dir / f"{args.agent}_{timestamp}.py"
+            shutil.copy2(agent_source_path, archive_path)
+            print(f"📋 Saved agent source copy to: {archive_path}")
+            results['agent_source_backup'] = str(archive_path)
+        else:
+            print(f"⚠️  Warning: Agent source file not found at {agent_source_path}")
+    except Exception as e:
+        print(f"⚠️  Warning: Failed to save agent source copy: {e}")
+    
     # Extract hyperparameters from agent for logging
     try:
         hyperparameters = {}
