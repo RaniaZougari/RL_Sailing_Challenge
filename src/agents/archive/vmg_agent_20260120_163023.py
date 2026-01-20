@@ -21,7 +21,7 @@ class MyAgent(BaseAgent):
         self.discount_factor = 0.99  # gamma
         
         # Epsilon with decay (per episode, not per step)
-        self.exploration_rate = 0.09      # Start high for exploration
+        self.exploration_rate = 0.05      # Start high for exploration
         self.min_exploration = 0.01      # Minimum epsilon
         self.eps_decay_rate = 0.995      # Decay per episode (slower)
 
@@ -37,7 +37,7 @@ class MyAgent(BaseAgent):
         
         # Q-table
         self.q_table = {}
-        self.q_init_high = 10.0
+        self.q_init_high = 1.0
         
         # State for learning
         self.last_efficiency = 0.0

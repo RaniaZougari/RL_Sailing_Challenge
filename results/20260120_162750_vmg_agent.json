@@ -84,6 +84,26 @@
       "custom_score": 41.7414437528886,
       "expected_score_100pct": 41.7414437528886,
       "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "simple_static": {
+      "success_rate": 0.62,
+      "mean_reward": 160.4484597435584,
+      "mean_steps": 646.87,
+      "std_reward": 24.020655922969883,
+      "std_steps": 374.11919637997727,
+      "success": true,
+      "custom_score": 0.09309578510367625,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
+    },
+    "static_headwind": {
+      "success_rate": 0.72,
+      "mean_reward": 129.75580374607068,
+      "mean_steps": 590.75,
+      "std_reward": 80.0739382573791,
+      "std_steps": 427.072344574078,
+      "success": true,
+      "custom_score": 0.19003067234803211,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
     }
   },
   "metadata": {

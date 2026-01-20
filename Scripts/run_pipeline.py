@@ -220,14 +220,17 @@ def eval_stage(args, results, exported_path=None):
         if not exported_path:
             return
     
-    # Parse scenarios
-    # Determine scenarios to run
+    # Evaluate on ALL available scenarios, not just training scenarios
+    # This ensures comprehensive evaluation regardless of training setup
+    all_scenarios = ['simple_static', 'static_headwind', 'training_1', 'training_2', 'training_3']
+    
+    # Allow override via --scenarios if explicitly provided
     if hasattr(args, 'scenarios') and args.scenarios:
         scenarios = args.scenarios.split(',')
+        print(f"Evaluating on specified scenarios: {scenarios}")
     else:
-        scenarios = args.scenario
-    
-    print(f"Evaluating on scenarios: {scenarios}")
+        scenarios = all_scenarios
+        print(f"Evaluating on all available scenarios: {scenarios}")
     
     eval_results = {}
     
