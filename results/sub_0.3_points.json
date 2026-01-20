@@ -1,0 +1,61 @@
+{
+  "hyperparameters": {},
+  "training": {},
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/sub_0.3_points.py",
+  "evaluation": {
+    "simple_static": {
+      "success_rate": 0.11,
+      "mean_reward": 68.57119396222001,
+      "mean_steps": 1000.0,
+      "std_reward": 52.0950515719582,
+      "std_steps": 0.0,
+      "success": true,
+      "custom_score": 0.0004748837215172365,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
+    },
+    "static_headwind": {
+      "success_rate": 0.07,
+      "mean_reward": 1.7158184889201293,
+      "mean_steps": 1000.0,
+      "std_reward": 7.763128356515474,
+      "std_steps": 0.0,
+      "success": true,
+      "custom_score": 0.0003021987318746051,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
+    },
+    "training_1": {
+      "success_rate": 0.95,
+      "mean_reward": 160.43738277227894,
+      "mean_steps": 228.42,
+      "std_reward": 35.732278430000314,
+      "std_steps": 185.25232414196591,
+      "success": true,
+      "custom_score": 9.56565592372691,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
+    },
+    "training_2": {
+      "success_rate": 1.0,
+      "mean_reward": 256.45341326123963,
+      "mean_steps": 131.41,
+      "std_reward": 45.941222320573445,
+      "std_steps": 106.54924636054447,
+      "success": true,
+      "custom_score": 26.69444660576779,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
+    },
+    "training_3": {
+      "success_rate": 0.98,
+      "mean_reward": 180.82179632313296,
+      "mean_steps": 160.61,
+      "std_reward": 28.356473626464258,
+      "std_steps": 149.1911455147389,
+      "success": true,
+      "custom_score": 19.50718847221728,
+      "custom_score_formula": "100 * 0.99^steps * success_rate"
+    }
+  },
+  "metadata": {
+    "agent": "sub_0.3_points",
+    "timestamp": "20260120_160314"
+  }
+}
