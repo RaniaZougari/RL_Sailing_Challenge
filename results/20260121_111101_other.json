@@ -1,0 +1,129 @@
+{
+  "agent_source_backup": "/home/unmars/Downloads/RL_Sailing_Challenge/src/agents/archive/other_20260121_111015.py",
+  "hyperparameters": {
+    "learning_rate": 0.1,
+    "discount_factor": 0.9,
+    "exploration_rate": 0.1,
+    "velocity_bins": [
+      0.2,
+      0.5,
+      1,
+      2,
+      5
+    ],
+    "wind_bins": [
+      0.5,
+      1,
+      2,
+      5
+    ]
+  },
+  "training": {
+    "scenarios": [
+      "training_1",
+      "training_2",
+      "training_3"
+    ],
+    "episodes": 1000,
+    "final_success_rate": 1.0,
+    "avg_reward": 388.4827191615535,
+    "avg_steps": 61.42133333333334,
+    "q_table_size": 2659,
+    "scenario_metrics": {
+      "training_1": {
+        "success_rate": 100.0,
+        "avg_reward": 388.0198339989258,
+        "avg_steps": 83.402
+      },
+      "training_2": {
+        "success_rate": 100.0,
+        "avg_reward": 387.86190657115685,
+        "avg_steps": 35.609
+      },
+      "training_3": {
+        "success_rate": 100.0,
+        "avg_reward": 389.56641691459134,
+        "avg_steps": 65.253
+      }
+    }
+  },
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/other_multi_3scenarios_20260121_111015.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/other_exported_20260121_111053.py",
+  "evaluation": {
+    "simple_static": {
+      "success": true,
+      "success_rate": 0.98,
+      "mean_reward": 228.60274620596437,
+      "mean_steps": 216.48,
+      "std_reward": 47.399217457036265,
+      "std_steps": 247.78658075045144,
+      "success_rate_std": 0,
+      "reward_std": 47.399217457036265,
+      "steps_std": 247.78658075045144,
+      "custom_score": 11.125844920789921,
+      "expected_score_100pct": 11.352902980397879,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "static_headwind": {
+      "success": true,
+      "success_rate": 0.96,
+      "mean_reward": 268.84082182078765,
+      "mean_steps": 100.48,
+      "std_reward": 37.39739107686202,
+      "std_steps": 186.18262432353885,
+      "success_rate_std": 0,
+      "reward_std": 37.39739107686202,
+      "steps_std": 186.18262432353885,
+      "custom_score": 34.96999628733063,
+      "expected_score_100pct": 36.427079465969406,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "training_1": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 297.1446093226127,
+      "mean_steps": 54.89,
+      "std_reward": 15.419939251011941,
+      "std_steps": 11.491644790890467,
+      "success_rate_std": 0,
+      "reward_std": 15.419939251011941,
+      "steps_std": 11.491644790890467,
+      "custom_score": 57.59911776411945,
+      "expected_score_100pct": 57.59911776411945,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "training_2": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 323.07005392550144,
+      "mean_steps": 31.74,
+      "std_reward": 7.235461432862278,
+      "std_steps": 4.283970121277692,
+      "success_rate_std": 0,
+      "reward_std": 7.235461432862278,
+      "steps_std": 4.283970121277692,
+      "custom_score": 72.68772502042836,
+      "expected_score_100pct": 72.68772502042836,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "training_3": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 291.14795725672286,
+      "mean_steps": 51.35,
+      "std_reward": 13.640690437502785,
+      "std_steps": 10.952967634390234,
+      "success_rate_std": 0,
+      "reward_std": 13.640690437502785,
+      "steps_std": 10.952967634390234,
+      "custom_score": 59.68528095966911,
+      "expected_score_100pct": 59.68528095966911,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    }
+  },
+  "metadata": {
+    "agent": "other",
+    "timestamp": "20260121_111101",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent other --scenario training_1 training_2 training_3 --episodes 1000"
+  }
+}

@@ -21,17 +21,28 @@ class QLearningAgent(BaseAgent):
         self.np_random = np.random.default_rng()
         
         # Learning parameters
-        self.learning_rate = 0.1
+
+        # Learning rate
+        self.INITIAL_LEARNING_RATE = 0.1
+        self.learning_rate = self.INITIAL_LEARNING_RATE
+        self.learning_rate_decay = 0.998  # More aggressive: 0.999 → 0.998
+        self.learning_rate_min = 0.01
+
+        # Exploration rate
+        self.INITIAL_EXPLORATION_RATE = 0.5
+        self.exploration_rate = self.INITIAL_EXPLORATION_RATE
+        self.exploration_rate_decay = 0.993  # More aggressive: 0.995 → 0.993
+        self.exploration_rate_min = 0.01
+
+        # Discount factor
         self.discount_factor = 0.9
-        self.exploration_rate = 0.1
+
         
         # Discretization parameters
-        self.num_angle_bins = 8
+        self.num_angle_bins = 16
         self.velocity_bins = [0.2, 0.5, 1, 2, 5]
         self.wind_bins = [0.5, 1, 2, 5]
         self.goal_dist_bins = [5, 10, 20, 30, 45]
-        
-        self.num_actions = 9  # Move this line up before estimate_state_action_space
         
         # Initialize Q-table
         # State space: position_x, position_y, velocity_direction, wind_direction
@@ -79,34 +90,42 @@ class QLearningAgent(BaseAgent):
         else:
             # Exploit: choose the best action according to Q-table
             if state not in self.q_table:
-                # If state not in Q-table, initialize it
-                self.q_table[state] = np.zeros(9)
+                # Optimistic initialization: encourages exploration
+                self.q_table[state] = np.ones(9) * 0.1
             
             # Return action with highest Q-value
             return np.argmax(self.q_table[state])
     
-    def learn(self, state, action, reward, next_state, next_action=None):
+    def learn(self, state, action, reward, next_state, next_action):
         """Update Q-table based on observed transition."""
-        # Initialize Q-values if states not in table
+        # Initialize Q-values if states not in table (optimistic initialization)
         if state not in self.q_table:
-            self.q_table[state] = np.zeros(9)
+            self.q_table[state] = np.ones(9) * 0.1
         if next_state not in self.q_table:
-            self.q_table[next_state] = np.zeros(9)
+            self.q_table[next_state] = np.ones(9) * 0.1
 
-        reward -= 5 # time penalty
+        # Reward shaping
+        shaped_reward = reward - 5  # time penalty
+        
+        # Velocity bonus: encourage maintaining good speed (avoid stopping)
+        # state[1] is v_norm_bin in the state tuple
+        if state[1] >= 2:  # If velocity bin >= 2 (moderate to fast)
+            shaped_reward += 0.5
         
         # Q-learning update
-        td_target = reward + self.discount_factor * self.q_table[next_state][next_action]
+        td_target = shaped_reward + self.discount_factor * np.max(self.q_table[next_state])
         td_error = td_target - self.q_table[state][action]
         self.q_table[state][action] += self.learning_rate * td_error
     
     def decay(self):
-        pass
+        self.learning_rate = max(self.learning_rate * self.learning_rate_decay, self.learning_rate_min)
+        self.exploration_rate = max(self.exploration_rate * self.exploration_rate_decay, self.exploration_rate_min)
 
     def reset(self):
         """Reset the agent for a new episode."""
         # Nothing to reset for Q-learning agent
-        pass
+        self.learning_rate = self.INITIAL_LEARNING_RATE
+        self.exploration_rate = self.INITIAL_EXPLORATION_RATE
         
     def seed(self, seed=None):
         """Set the random seed."""

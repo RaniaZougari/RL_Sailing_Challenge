@@ -1,0 +1,129 @@
+{
+  "agent_source_backup": "/home/unmars/Downloads/RL_Sailing_Challenge/src/agents/archive/other_20260121_112248.py",
+  "hyperparameters": {
+    "learning_rate": 0.1,
+    "discount_factor": 0.9,
+    "exploration_rate": 0.1,
+    "velocity_bins": [
+      0.2,
+      0.5,
+      1,
+      2,
+      5
+    ],
+    "wind_bins": [
+      0.5,
+      1,
+      2,
+      5
+    ]
+  },
+  "training": {
+    "scenarios": [
+      "training_1",
+      "training_2",
+      "training_3"
+    ],
+    "episodes": 1000,
+    "final_success_rate": 1.0,
+    "avg_reward": 388.8290282857628,
+    "avg_steps": 61.69466666666667,
+    "q_table_size": 2652,
+    "scenario_metrics": {
+      "training_1": {
+        "success_rate": 100.0,
+        "avg_reward": 388.60629500074486,
+        "avg_steps": 83.629
+      },
+      "training_2": {
+        "success_rate": 100.0,
+        "avg_reward": 388.3310291545798,
+        "avg_steps": 36.399
+      },
+      "training_3": {
+        "success_rate": 100.0,
+        "avg_reward": 389.549760701974,
+        "avg_steps": 65.056
+      }
+    }
+  },
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/other_multi_3scenarios_20260121_112248.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/other_exported_20260121_112337.py",
+  "evaluation": {
+    "simple_static": {
+      "success": true,
+      "success_rate": 0.84,
+      "mean_reward": 227.63694781542873,
+      "mean_steps": 324.23,
+      "std_reward": 45.8061152426631,
+      "std_steps": 368.24160153355837,
+      "success_rate_std": 0,
+      "reward_std": 45.8061152426631,
+      "steps_std": 368.24160153355837,
+      "custom_score": 3.2290772169250372,
+      "expected_score_100pct": 3.8441395439583776,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "static_headwind": {
+      "success": true,
+      "success_rate": 0.97,
+      "mean_reward": 263.70871748679093,
+      "mean_steps": 108.3,
+      "std_reward": 40.3105574759082,
+      "std_steps": 187.46613027424448,
+      "success_rate_std": 0,
+      "reward_std": 40.3105574759082,
+      "steps_std": 187.46613027424448,
+      "custom_score": 32.66354439106883,
+      "expected_score_100pct": 33.67375710419467,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "training_1": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 294.2073330809581,
+      "mean_steps": 56.79,
+      "std_reward": 15.577629489917195,
+      "std_steps": 10.953807557192157,
+      "success_rate_std": 0,
+      "reward_std": 15.577629489917195,
+      "steps_std": 10.953807557192157,
+      "custom_score": 56.509660897278245,
+      "expected_score_100pct": 56.509660897278245,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "training_2": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 324.47103301161684,
+      "mean_steps": 31.53,
+      "std_reward": 7.474723471170533,
+      "std_steps": 4.541926903859198,
+      "success_rate_std": 0,
+      "reward_std": 7.474723471170533,
+      "steps_std": 4.541926903859198,
+      "custom_score": 72.84129959867481,
+      "expected_score_100pct": 72.84129959867481,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    },
+    "training_3": {
+      "success": true,
+      "success_rate": 1.0,
+      "mean_reward": 282.29866483136925,
+      "mean_steps": 62.68,
+      "std_reward": 15.645930912007591,
+      "std_steps": 17.616401448650063,
+      "success_rate_std": 0,
+      "reward_std": 15.645930912007591,
+      "steps_std": 17.616401448650063,
+      "custom_score": 53.26157408553587,
+      "expected_score_100pct": 53.26157408553587,
+      "custom_score_formula": "100 \u00d7 0.99^steps \u00d7 success_rate"
+    }
+  },
+  "metadata": {
+    "agent": "other",
+    "timestamp": "20260121_112348",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent other --scenario training_1 training_2 training_3 --episodes 1000"
+  }
+}
