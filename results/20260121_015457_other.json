@@ -1,0 +1,91 @@
+{
+  "agent_source_backup": "/home/unmars/Downloads/RL_Sailing_Challenge/src/agents/archive/other_20260121_015411.py",
+  "hyperparameters": {
+    "learning_rate": 0.1,
+    "discount_factor": 0.9,
+    "exploration_rate": 0.1,
+    "velocity_bins": [
+      0.2,
+      0.5,
+      1,
+      2,
+      5
+    ],
+    "wind_bins": [
+      0.5,
+      1,
+      2,
+      5
+    ]
+  },
+  "training": {
+    "scenarios": [
+      "simple_static",
+      "static_headwind",
+      "training_1",
+      "training_2",
+      "training_3"
+    ],
+    "episodes": 500,
+    "final_success_rate": 1.0,
+    "avg_reward": 388.518854926308,
+    "avg_steps": 111.2312,
+    "q_table_size": 2301,
+    "scenario_metrics": {
+      "simple_static": {
+        "success_rate": 100.0,
+        "avg_reward": 387.58251545365283,
+        "avg_steps": 157.0
+      },
+      "static_headwind": {
+        "success_rate": 100.0,
+        "avg_reward": 388.76969178059665,
+        "avg_steps": 177.956
+      },
+      "training_1": {
+        "success_rate": 100.0,
+        "avg_reward": 388.6067610920518,
+        "avg_steps": 92.62
+      },
+      "training_2": {
+        "success_rate": 100.0,
+        "avg_reward": 388.3171224320036,
+        "avg_steps": 38.654
+      },
+      "training_3": {
+        "success_rate": 100.0,
+        "avg_reward": 389.31818387325524,
+        "avg_steps": 89.926
+      }
+    }
+  },
+  "model_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/models/other_multi_5scenarios_20260121_015411.pkl",
+  "exported_path": "/home/unmars/Downloads/RL_Sailing_Challenge/src/Submission_agents/other_exported_20260121_015453.py",
+  "evaluation": {
+    "simple_static": {
+      "output": "\u274c Error: 'MyAgentTrained' object has no attribute 'estimate_state_action_space'\n",
+      "success": false
+    },
+    "static_headwind": {
+      "output": "\u274c Error: 'MyAgentTrained' object has no attribute 'estimate_state_action_space'\n",
+      "success": false
+    },
+    "training_1": {
+      "output": "\u274c Error: 'MyAgentTrained' object has no attribute 'estimate_state_action_space'\n",
+      "success": false
+    },
+    "training_2": {
+      "output": "\u274c Error: 'MyAgentTrained' object has no attribute 'estimate_state_action_space'\n",
+      "success": false
+    },
+    "training_3": {
+      "output": "\u274c Error: 'MyAgentTrained' object has no attribute 'estimate_state_action_space'\n",
+      "success": false
+    }
+  },
+  "metadata": {
+    "agent": "other",
+    "timestamp": "20260121_015457",
+    "command": "Scripts/run_pipeline.py train+export+eval --agent other --scenario simple_static static_headwind training_1 training_2 training_3 --episodes 500"
+  }
+}

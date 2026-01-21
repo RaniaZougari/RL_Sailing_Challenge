@@ -7,9 +7,10 @@ Auto-generated from: /home/unmars/Downloads/RL_Sailing_Challenge/src/agents/othe
 """
 
 import numpy as np
-from evaluator.base_agent import BaseAgent
+from agents.base_agent import BaseAgent
+from src.sailing_physics import calculate_sailing_efficiency
 
-class MyAgent(BaseAgent):
+class MyAgentTrained(BaseAgent):
     """
     A Q-learning agent trained on the sailing environment.
     Uses a discretized state space and a lookup table for actions.
@@ -23,11 +24,12 @@ class MyAgent(BaseAgent):
         self.learning_rate = 0.1
         self.discount_factor = 0.9
         self.exploration_rate = 0.1
-        self.num_angle_bins = 8
-        self.velocity_bins = [0.2, 0.5, 1, 2, 5]
-        self.wind_bins = [0.5, 1, 2, 5]
-        self.goal_dist_bins = [5, 10, 20, 30, 45]
+        self.num_angle_bins = num_angle_bins
+        self.velocity_bins = velocity_bins if velocity_bins is not None else [0.2, 0.5, 1, 2, 5]
+        self.wind_bins = wind_bins if wind_bins is not None else [0.5, 1, 2, 5]
+        self.goal_dist_bins = goal_dist_bins if goal_dist_bins is not None else [5, 10, 20, 30, 45]
         self.num_actions = 9  # Move this line up before estimate_state_action_space
+        self.estimate_state_action_space()
 
         # Q-table with learned values
         self.q_table = {}
@@ -3826,6 +3828,24 @@ class MyAgent(BaseAgent):
 
         return (v_angle_bin, v_norm_bin, w_angle_bin, w_norm_bin, g_angle_bin, g_norm_bin)
 
+    def act(self, observation):
+        """Choose an action using epsilon-greedy policy."""
+        # Discretize the state
+        state = self.discretize_state(observation)
+
+        # Epsilon-greedy action selection
+        if self.np_random.random() < self.exploration_rate:
+            # Explore: choose a random action
+            return self.np_random.integers(0, 9)
+        else:
+            # Exploit: choose the best action according to Q-table
+            if state not in self.q_table:
+                # If state not in Q-table, initialize it
+                self.q_table[state] = np.zeros(9)
+
+            # Return action with highest Q-value
+            return np.argmax(self.q_table[state])
+
     def learn(self, state, action, reward, next_state, next_action=None):
         """Update Q-table based on observed transition."""
         # Initialize Q-values if states not in table
@@ -3860,10 +3880,3 @@ class MyAgent(BaseAgent):
         import pickle
         with open(path, 'rb') as f:
             self.q_table = pickle.load(f)
-
-    def act(self, observation):
-        """Choose the best action according to the learned Q-table."""
-        state = self.discretize_state(observation)
-        if state not in self.q_table:
-            return 0  # Default to North
-        return np.argmax(self.q_table[state])

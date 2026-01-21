@@ -123,7 +123,7 @@ def save_qlearning_agent(agent, output_path, agent_class_name="QLearningTrainedA
     
     # Methods to extract from source
     methods_to_extract = [
-        'discretize_state', 'act', 'learn', 
+        'discretize_state', 'learn', 
         'reset', 'seed', 'save', 'load', 
         '_action_to_direction', '_calculate_vmg', '_calculate_vmg_reward', 
         '_calculate_sailing_efficiency_safe', '_calculate_vmg_from_movement',
@@ -186,6 +186,9 @@ class {agent_class_name}(BaseAgent):
             # Fallback: use default implementations
             file_content += _get_default_method(method_name)
     
+    # Always include the default act method (which is the pure exploitation one)
+    file_content += _get_default_method('act')
+    
     # Write the file
     with open(output_path, 'w') as f:
         f.write(file_content)
@@ -221,13 +224,13 @@ def _get_default_method(method_name):
 
         return (x_bin, y_bin, v_bin, wind_bin)
 ''',
-        'act': '''
-    def act(self, observation, info=None):
-        """Select an action using the Q-table."""
+    'act': '''
+    def act(self, observation):
+        """Choose the best action according to the learned Q-table."""
         state = self.discretize_state(observation)
-        if state in self.q_table:
-            return np.argmax(self.q_table[state])
-        return self.np_random.integers(0, 9)
+        if state not in self.q_table:
+            return 0  # Default to North if state not seen during training
+        return np.argmax(self.q_table[state])
 ''',
         'learn': '''
     def learn(self, state, action, reward, next_state):
