@@ -93,10 +93,11 @@ class QLearningAgent(BaseAgent):
         if next_state not in self.q_table:
             self.q_table[next_state] = np.zeros(9)
 
-        reward -= 5 # time penalty
+        reward -= 10 # time penalty
         
         # Q-learning update
-        td_target = reward + self.discount_factor * self.q_table[next_state][next_action]
+        best_next_action = np.argmax(self.q_table[next_state])
+        td_target = reward + self.discount_factor * self.q_table[next_state][best_next_action]
         td_error = td_target - self.q_table[state][action]
         self.q_table[state][action] += self.learning_rate * td_error
     

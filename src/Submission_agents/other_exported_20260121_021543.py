@@ -7,9 +7,10 @@ Auto-generated from: /home/unmars/Downloads/RL_Sailing_Challenge/src/agents/othe
 """
 
 import numpy as np
-from evaluator.base_agent import BaseAgent
+from agents.base_agent import BaseAgent
+from src.sailing_physics import calculate_sailing_efficiency
 
-class MyAgent(BaseAgent):
+class MyAgentTrained(BaseAgent):
     """
     A Q-learning agent trained on the sailing environment.
     Uses a discretized state space and a lookup table for actions.
@@ -5054,5 +5055,5 @@ class MyAgent(BaseAgent):
         """Choose the best action according to the learned Q-table."""
         state = self.discretize_state(observation)
         if state not in self.q_table:
-            return 0  # Default to North
+            return 0  # Default to North if state not seen during training
         return np.argmax(self.q_table[state])
